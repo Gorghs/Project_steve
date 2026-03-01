@@ -15,9 +15,9 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Add security headers with proper CSP
+// Add security headers with a stricter CSP (no inline/eval scripts)
 app.use((req, res, next) => {
-    res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https:;");
+    res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self';");
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Frame-Options', 'SAMEORIGIN');
     res.setHeader('X-XSS-Protection', '1; mode=block');

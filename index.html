@@ -593,8 +593,8 @@
         <h1>🤖 Enterprise Workflow Intelligence</h1>
         <p>Transform complex business requirements into production-ready automation workflows powered by advanced AI agents. Premium platform for enterprise automation.</p>
         <div class="cta-buttons">
-            <button class="btn btn-primary" onclick="scrollToBuilder()">Start Building</button>
-            <button class="btn btn-secondary" onclick="showDocs()">View Docs</button>
+            <button class="btn btn-primary" id="start-building-btn">Start Building</button>
+            <button class="btn btn-secondary" id="view-docs-btn">View Docs</button>
         </div>
     </section>
 
@@ -684,7 +684,7 @@
                 </div>
             </div>
 
-            <button class="generate-btn" onclick="generateWorkflow()">⚡ Generate Workflow</button>
+            <button class="generate-btn" id="generate-btn">⚡ Generate Workflow</button>
         </div>
     </section>
 
@@ -711,7 +711,7 @@
 
     <div id="modal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
+            <span class="close" id="modal-close">&times;</span>
             <h2>📚 Documentation</h2>
             <p><strong>Getting Started:</strong></p>
             <p>1. Copy your workflow requirements into the builder above<br>
@@ -727,74 +727,6 @@
         </div>
     </div>
 
-    <script>
-        function scrollToBuilder() {
-            document.getElementById('builder').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function showDocs() {
-            document.getElementById('modal').classList.add('show');
-        }
-
-        function closeModal() {
-            document.getElementById('modal').classList.remove('show');
-        }
-
-        async function generateWorkflow() {
-            const requirements = document.getElementById('requirements').value;
-            if (!requirements.trim()) {
-                alert('Please describe what you want to automate!');
-                return;
-            }
-
-            const btn = event.target;
-            const originalText = btn.textContent;
-            btn.textContent = '⏳ Processing... (Build → QA → Security)';
-            btn.disabled = true;
-
-            try {
-                console.log('Sending request to /api/generate-workflow');
-                const response = await fetch('/api/generate-workflow', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ requirements })
-                });
-
-                console.log('Response status:', response.status);
-                const data = await response.json();
-                console.log('Response data:', data);
-
-                if (!response.ok) {
-                    throw new Error(data.error || data.details || `HTTP ${response.status}`);
-                }
-
-                // Show success message with download option
-                const workflowId = data.workflowId;
-                const message = `✅ Workflow Generated Successfully!\n\n🎯 Workflow ID: ${workflowId}\n\n📋 Phases Completed:\n✓ Build Captain - Architecture generated\n✓ QA Compliance - Validated\n✓ Security Architect - Hardened\n\n💾 Your workflow JSON is ready!`;
-                
-                alert(message);
-                
-                // Auto-download the workflow JSON
-                const downloadUrl = `/api/workflow/${workflowId}/export`;
-                window.location.href = downloadUrl;
-
-            } catch (error) {
-                console.error('Error:', error);
-                alert(`❌ Error: ${error.message}\n\nPlease try again or check the console for details.`);
-            } finally {
-                btn.textContent = originalText;
-                btn.disabled = false;
-            }
-        }
-
-        window.onclick = function(event) {
-            const modal = document.getElementById('modal');
-            if (event.target == modal) {
-                closeModal();
-            }
-        }
-    </script>
+    <script src="/app.js" defer></script>
 </body>
 </html>
