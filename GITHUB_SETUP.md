@@ -36,5 +36,5 @@ Your code is now on GitHub! ✅
 4. Select `project-steve` repository
 5. Deploy! 🚀
 
-Your platform will be live at: `project-steve.vercel.app`
+Your platform will be live at: `project-steve-phi.vercel.app`
 
