@@ -14,21 +14,34 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname)));
 
 // Store generated workflows in memory for demo purposes
 const generatedWorkflows = {};
 
-// ==================== ENDPOINTS ====================
+// ==================== API ROUTES (MUST BE FIRST) ====================
 
-// Serve the main dashboard
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
-
-// Favicon endpoint to prevent 404 errors
+// Favicon endpoint
 app.get('/favicon.ico', (req, res) => {
     res.status(204).end();
+});
+
+// Health check
+app.get('/api/health', (req, res) => {
+    res.json({ 
+        status: 'ok',
+        service: 'Project Steve',
+        version: '1.0.0',
+        uptime: process.uptime()
+    });
+});
+
+// Test endpoint
+app.get('/api/test', (req, res) => {
+    res.json({
+        status: 'ok',
+        message: 'API is working correctly',
+        timestamp: new Date()
+    });
 });
 
 // API: Generate workflow through three-phase AI processing
@@ -124,25 +137,6 @@ app.get('/api/workflows', (req, res) => {
         createdAt: new Date(parseInt(id))
     }));
     res.json({ workflows });
-});
-
-// Health check
-app.get('/api/health', (req, res) => {
-    res.json({ 
-        status: 'ok',
-        service: 'Project Steve',
-        version: '1.0.0',
-        uptime: process.uptime()
-    });
-});
-
-// Test endpoint
-app.get('/api/test', (req, res) => {
-    res.json({
-        status: 'ok',
-        message: 'API is working correctly',
-        timestamp: new Date()
-    });
 });
 
 // ==================== PHASE FUNCTIONS ====================
@@ -325,6 +319,10 @@ async function securityPhase(workflow) {
 
 // ==================== ERROR HANDLING ====================
 
+// Serve static files AFTER API routes so API routes take precedence
+app.use(express.static(path.join(__dirname)));
+
+// Error handler for server errors
 app.use((err, req, res, next) => {
     console.error(err);
     res.status(500).json({
@@ -333,6 +331,7 @@ app.use((err, req, res, next) => {
     });
 });
 
+// 404 handler - must be last
 app.use((req, res) => {
     res.status(404).json({ error: 'Endpoint not found' });
 });
