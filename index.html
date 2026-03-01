@@ -767,6 +767,7 @@
             btn.disabled = true;
 
             try {
+                console.log('Sending request to /api/generate-workflow');
                 const response = await fetch('/api/generate-workflow', {
                     method: 'POST',
                     headers: {
@@ -775,15 +776,17 @@
                     body: JSON.stringify({ requirements })
                 });
 
+                console.log('Response status:', response.status);
                 const data = await response.json();
+                console.log('Response data:', data);
 
                 if (!response.ok) {
-                    throw new Error(data.error || 'Failed to generate workflow');
+                    throw new Error(data.error || data.details || `HTTP ${response.status}`);
                 }
 
                 // Show success message with download option
                 const workflowId = data.workflowId;
-                const message = `✅ Workflow Generated Successfully!\n\n🎯 Workflow ID: ${workflowId}\n\n📋 Phases Completed:\n✓ Build Captain - Architecture generated\n✓ QA Compliance - Validated\n✓ Security Architect - Hardened\n\n💾 Next: Download and import into n8n!`;
+                const message = `✅ Workflow Generated Successfully!\n\n🎯 Workflow ID: ${workflowId}\n\n📋 Phases Completed:\n✓ Build Captain - Architecture generated\n✓ QA Compliance - Validated\n✓ Security Architect - Hardened\n\n💾 Your workflow JSON is ready!`;
                 
                 alert(message);
                 
@@ -793,7 +796,7 @@
 
             } catch (error) {
                 console.error('Error:', error);
-                alert(`❌ Error: ${error.message}`);
+                alert(`❌ Error: ${error.message}\n\nPlease try again or check the console for details.`);
             } finally {
                 btn.textContent = originalText;
                 btn.disabled = false;

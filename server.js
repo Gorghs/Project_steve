@@ -26,6 +26,11 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+// Favicon endpoint to prevent 404 errors
+app.get('/favicon.ico', (req, res) => {
+    res.status(204).end();
+});
+
 // API: Generate workflow through three-phase AI processing
 app.post('/api/generate-workflow', async (req, res) => {
     try {
@@ -38,45 +43,49 @@ app.post('/api/generate-workflow', async (req, res) => {
         }
 
         // Phase 1: Build Captain - Generate workflow architecture
-        const buildPhase = await buildPhase(requirements);
-        if (buildPhase.error) {
-            return res.status(500).json({ error: buildPhase.error });
+        let buildPhaseResult = await buildPhase(requirements);
+        if (buildPhaseResult.error) {
+            console.error('Build phase error:', buildPhaseResult.error);
+            return res.status(400).json({ error: buildPhaseResult.error });
         }
 
         // Phase 2: QA Compliance - Validate and improve
-        const qaPhase = await qaPhase(buildPhase.workflow);
-        if (qaPhase.error) {
-            return res.status(500).json({ error: qaPhase.error });
+        let qaPhaseResult = await qaPhase(buildPhaseResult.workflow);
+        if (qaPhaseResult.error) {
+            console.error('QA phase error:', qaPhaseResult.error);
+            return res.status(400).json({ error: qaPhaseResult.error });
         }
 
         // Phase 3: Security Architect - Secure the workflow
-        const securityPhase = await securityPhase(qaPhase.workflow);
-        if (securityPhase.error) {
-            return res.status(500).json({ error: securityPhase.error });
+        let securityPhaseResult = await securityPhase(qaPhaseResult.workflow);
+        if (securityPhaseResult.error) {
+            console.error('Security phase error:', securityPhaseResult.error);
+            return res.status(400).json({ error: securityPhaseResult.error });
         }
 
         // Final validated workflow
-        const finalWorkflow = securityPhase.workflow;
+        const finalWorkflow = securityPhaseResult.workflow;
         const workflowId = Date.now().toString();
         generatedWorkflows[workflowId] = finalWorkflow;
 
-        res.json({
+        return res.status(200).json({
             success: true,
             message: 'Workflow generated successfully!',
             workflowId,
             workflow: finalWorkflow,
             phases: {
-                build: buildPhase,
-                qa: qaPhase,
-                security: securityPhase
+                build: buildPhaseResult,
+                qa: qaPhaseResult,
+                security: securityPhaseResult
             }
         });
 
     } catch (error) {
         console.error('Workflow generation error:', error);
-        res.status(500).json({ 
+        return res.status(500).json({ 
             error: 'Failed to generate workflow',
-            details: error.message 
+            details: error.message,
+            stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
         });
     }
 });
@@ -121,8 +130,18 @@ app.get('/api/workflows', (req, res) => {
 app.get('/api/health', (req, res) => {
     res.json({ 
         status: 'ok',
-        service: 'n8n Agentic Builder',
-        version: '1.0.0'
+        service: 'Project Steve',
+        version: '1.0.0',
+        uptime: process.uptime()
+    });
+});
+
+// Test endpoint
+app.get('/api/test', (req, res) => {
+    res.json({
+        status: 'ok',
+        message: 'API is working correctly',
+        timestamp: new Date()
     });
 });
 
