@@ -2,7 +2,11 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
-require('dotenv').config();
+
+// Load environment variables
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -127,11 +131,17 @@ app.get('/api/health', (req, res) => {
 // PHASE 1: Build Captain - Generates the workflow
 async function buildPhase(requirements) {
     try {
-        // This is a simulation. In production, this would call OpenAI API with the Build Captain prompt
-        const buildCaption = fs.readFileSync(
-            path.join(__dirname, 'prompts', 'n8n_Build_Captain.md'),
-            'utf8'
-        );
+        // Try to read Build Captain prompt if it exists
+        let buildCaption = '';
+        try {
+            buildCaption = fs.readFileSync(
+                path.join(__dirname, 'prompts', 'n8n_Build_Captain.md'),
+                'utf8'
+            );
+        } catch (e) {
+            // File might not exist in production, that's okay
+            buildCaption = 'Build Captain: Generate workflow architecture';
+        }
 
         const workflow = {
             name: `Generated-${Date.now()}`,
@@ -190,11 +200,17 @@ async function buildPhase(requirements) {
 // PHASE 2: QA Compliance - Validates and improves
 async function qaPhase(workflow) {
     try {
-        // This simulates QA validation
-        const qaCheckpoint = fs.readFileSync(
-            path.join(__dirname, 'prompts', 'n8n_QA_Compliance.md'),
-            'utf8'
-        );
+        // Try to read QA Compliance prompt if it exists
+        let qaCheckpoint = '';
+        try {
+            qaCheckpoint = fs.readFileSync(
+                path.join(__dirname, 'prompts', 'n8n_QA_Compliance.md'),
+                'utf8'
+            );
+        } catch (e) {
+            // File might not exist in production, that's okay
+            qaCheckpoint = 'QA Compliance: Validate workflow quality';
+        }
 
         // Ensure proper naming conventions
         const improvedWorkflow = {
@@ -230,11 +246,17 @@ async function qaPhase(workflow) {
 // PHASE 3: Security Architect - Hardens security
 async function securityPhase(workflow) {
     try {
-        // This simulates security hardening
-        const securityArch = fs.readFileSync(
-            path.join(__dirname, 'prompts', 'n8n_Security_Architect.md'),
-            'utf8'
-        );
+        // Try to read Security Architect prompt if it exists
+        let securityArch = '';
+        try {
+            securityArch = fs.readFileSync(
+                path.join(__dirname, 'prompts', 'n8n_Security_Architect.md'),
+                'utf8'
+            );
+        } catch (e) {
+            // File might not exist in production, that's okay
+            securityArch = 'Security Architect: Harden workflow security';
+        }
 
         // Add security parameters
         const securedWorkflow = {
@@ -298,13 +320,15 @@ app.use((req, res) => {
 
 // ==================== START SERVER ====================
 
-app.listen(PORT, () => {
-    console.log(`\n🚀 Project Steve - Enterprise AI Workflow Platform`);
-    console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
-    console.log(`📍 Platform: http://localhost:${PORT}`);
-    console.log(`🔌 API: http://localhost:${PORT}/api`);
-    console.log(`💚 Health: http://localhost:${PORT}/api/health`);
-    console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`);
-});
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`\n🚀 Project Steve - Enterprise AI Workflow Platform`);
+        console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+        console.log(`📍 Platform: http://localhost:${PORT}`);
+        console.log(`🔌 API: http://localhost:${PORT}/api`);
+        console.log(`💚 Health: http://localhost:${PORT}/api/health`);
+        console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`);
+    });
+}
 
 module.exports = app;
