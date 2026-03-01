@@ -9,49 +9,53 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Project Steve — Agentic n8n Builder</title>
+        <title>Project Steve — Grid Blacksite</title>
         <style>
             :root {
-                --bg: #030303;
-                --panel: #0b0b0f;
-                --edge: #1a1a20;
-                --text: #e7e7ed;
-                --muted: #8e8ea0;
-                --accent: #6cf0ff;
-                --accent-2: #7c7cff;
-                --success: #7ef7c4;
+                --bg: #050505;
+                --grid: rgba(255,255,255,0.07);
+                --panel: #0c0c0c;
+                --edge: #1c1c1c;
+                --text: #f5f5f5;
+                --muted: #b5b5b5;
+                --accent: #ffffff;
+                --success: #9cf3c5;
             }
 
             * { margin: 0; padding: 0; box-sizing: border-box; }
 
             body {
-                font-family: "Segoe UI", "Inter", system-ui, -apple-system, sans-serif;
-                background: radial-gradient(circle at 20% 20%, rgba(124,124,255,0.08), transparent 40%),
-                            radial-gradient(circle at 80% 10%, rgba(108,240,255,0.08), transparent 35%),
-                            linear-gradient(145deg, #050505 0%, #07070a 50%, #040406 100%);
+                font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+                background: var(--bg);
                 color: var(--text);
                 min-height: 100vh;
-                overflow-x: hidden;
+                overflow: hidden;
                 position: relative;
             }
 
-            .grid-overlay {
+            .grid-bg {
                 position: fixed;
                 inset: 0;
-                background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-                                  linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-                background-size: 32px 32px;
+                background-image:
+                    linear-gradient(var(--grid) 1px, transparent 1px),
+                    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+                background-size: 80px 80px;
+                opacity: 0.5;
                 pointer-events: none;
-                opacity: 0.35;
-                animation: drift 18s linear infinite;
+                animation: slide 28s linear infinite;
             }
 
-            @keyframes drift { to { transform: translateY(-32px); } }
+            @keyframes slide {
+                from { transform: translateY(0); }
+                to { transform: translateY(-80px); }
+            }
 
             header {
-                max-width: 1180px;
+                position: relative;
+                z-index: 2;
+                max-width: 1100px;
                 margin: 0 auto;
-                padding: 28px 20px;
+                padding: 26px 24px 12px;
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
@@ -62,26 +66,21 @@
                 align-items: center;
                 gap: 12px;
                 font-weight: 800;
-                letter-spacing: 0.5px;
+                letter-spacing: 0.14em;
             }
 
-            .brand-mark {
-                width: 44px;
-                height: 44px;
-                border-radius: 12px;
+            .brand-badge {
+                width: 46px;
+                height: 46px;
+                border-radius: 10px;
                 border: 1px solid var(--edge);
-                background: radial-gradient(circle at 30% 30%, rgba(108,240,255,0.4), transparent 50%),
-                            radial-gradient(circle at 70% 70%, rgba(124,124,255,0.35), transparent 55%),
-                            #0c0c12;
+                background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.25), transparent 50%),
+                            var(--panel);
                 display: grid;
                 place-items: center;
-                font-size: 18px;
-                animation: pulse 2.6s ease-in-out infinite;
-            }
-
-            @keyframes pulse {
-                0%, 100% { box-shadow: 0 0 0 0 rgba(108,240,255,0.22); }
-                50% { box-shadow: 0 0 0 12px rgba(108,240,255,0); }
+                font-size: 16px;
+                color: var(--text);
+                box-shadow: 0 0 0 1px var(--edge), 0 10px 40px rgba(0,0,0,0.45);
             }
 
             .pill {
@@ -89,82 +88,85 @@
                 border-radius: 999px;
                 border: 1px solid var(--edge);
                 color: var(--muted);
-                font-size: 12px;
+                font-size: 11px;
                 text-transform: uppercase;
-                letter-spacing: 0.08em;
+                letter-spacing: 0.12em;
             }
 
             main {
-                max-width: 1180px;
-                margin: 10px auto 60px;
-                padding: 0 20px 40px;
+                position: relative;
+                z-index: 2;
+                max-width: 1100px;
+                margin: 0 auto;
+                padding: 0 24px 48px;
             }
 
-            .hero-card {
-                background: linear-gradient(135deg, rgba(108,240,255,0.06), rgba(108,240,255,0)) padding-box,
-                            linear-gradient(225deg, rgba(124,124,255,0.25), rgba(124,124,255,0)) padding-box,
+            .shell {
+                background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0)) padding-box,
                             var(--panel);
                 border: 1px solid var(--edge);
-                border-radius: 20px;
-                padding: 32px;
-                box-shadow: 0 25px 80px rgba(0,0,0,0.55);
+                border-radius: 18px;
+                padding: 28px;
+                box-shadow: 0 30px 90px rgba(0,0,0,0.6);
             }
 
-            .layout {
+            .grid-layout {
                 display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-                gap: 28px;
+                grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+                gap: 26px;
                 align-items: start;
             }
 
             h1 {
-                font-size: 34px;
+                font-size: 38px;
+                letter-spacing: 0.08em;
                 line-height: 1.2;
-                margin-bottom: 12px;
+                margin-bottom: 14px;
             }
 
             .lede {
                 color: var(--muted);
-                line-height: 1.6;
-                margin-bottom: 18px;
+                line-height: 1.7;
+                margin-bottom: 20px;
+                max-width: 540px;
             }
 
-            .chips {
-                display: flex;
-                gap: 8px;
-                flex-wrap: wrap;
-                margin-bottom: 22px;
+            .tags {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                gap: 10px;
             }
 
-            .chip {
-                padding: 8px 12px;
-                border-radius: 10px;
+            .tag {
+                padding: 10px 12px;
                 border: 1px solid var(--edge);
-                background: #0f0f15;
+                border-radius: 10px;
+                background: #0f0f0f;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                font-size: 11px;
                 color: var(--text);
-                font-weight: 600;
-                font-size: 13px;
             }
 
             .panel {
-                background: #0c0c12;
+                background: #0a0a0a;
                 border: 1px solid var(--edge);
-                border-radius: 16px;
+                border-radius: 14px;
                 padding: 18px;
             }
 
             label {
                 display: block;
                 color: var(--muted);
-                font-size: 13px;
+                font-size: 12px;
+                letter-spacing: 0.06em;
                 margin-bottom: 8px;
-                letter-spacing: 0.02em;
             }
 
             textarea {
                 width: 100%;
-                min-height: 160px;
-                background: #050508;
+                min-height: 170px;
+                background: #050505;
                 border: 1px solid var(--edge);
                 border-radius: 12px;
                 color: var(--text);
@@ -178,7 +180,7 @@
             textarea:focus {
                 outline: none;
                 border-color: var(--accent);
-                box-shadow: 0 0 0 1px rgba(108,240,255,0.35);
+                box-shadow: 0 0 0 1px rgba(255,255,255,0.35);
             }
 
             .controls {
@@ -186,38 +188,38 @@
                 display: flex;
                 gap: 12px;
                 align-items: center;
+                flex-wrap: wrap;
             }
 
             .btn {
                 padding: 14px 18px;
                 border-radius: 12px;
-                border: 1px solid transparent;
+                border: 1px solid var(--edge);
                 cursor: pointer;
-                font-weight: 700;
-                transition: transform 0.12s ease, box-shadow 0.2s ease, border 0.2s ease;
-            }
-
-            .btn-primary {
-                background: linear-gradient(90deg, var(--accent), var(--accent-2));
+                font-weight: 800;
+                letter-spacing: 0.08em;
+                background: #fff;
                 color: #000;
-                box-shadow: 0 10px 30px rgba(108,240,255,0.25);
+                transition: transform 0.1s ease, box-shadow 0.2s ease;
             }
 
-            .btn-primary:hover { transform: translateY(-1px) scale(1.01); }
-            .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+            .btn:hover { transform: translateY(-1px); }
+            .btn:active { transform: translateY(0); }
+            .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
             .status {
                 color: var(--muted);
-                font-size: 13px;
+                font-size: 12px;
+                letter-spacing: 0.06em;
             }
 
             .status strong { color: var(--success); }
 
             .result-panel {
-                margin-top: 18px;
-                background: #050508;
+                margin-top: 16px;
+                background: #050505;
                 border: 1px solid var(--edge);
-                border-radius: 14px;
+                border-radius: 12px;
                 padding: 12px;
             }
 
@@ -225,20 +227,23 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                margin-bottom: 8px;
                 color: var(--muted);
+                margin-bottom: 8px;
+                font-size: 12px;
+                letter-spacing: 0.08em;
             }
 
             .result-actions { display: flex; gap: 10px; }
 
             .copy-btn {
-                background: #0f0f15;
+                background: #0f0f0f;
                 border: 1px solid var(--edge);
                 color: var(--text);
                 padding: 10px 14px;
                 border-radius: 10px;
                 cursor: pointer;
-                font-weight: 600;
+                font-weight: 700;
+                letter-spacing: 0.06em;
             }
 
             .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
@@ -246,8 +251,8 @@
             .json-output {
                 width: 100%;
                 min-height: 220px;
-                background: #030305;
-                color: #d9ffe4;
+                background: #030303;
+                color: #e8ffe5;
                 border: 1px solid var(--edge);
                 border-radius: 10px;
                 padding: 12px;
@@ -259,55 +264,59 @@
             .hidden { display: none; }
 
             footer {
-                max-width: 1180px;
-                margin: 40px auto 20px;
-                padding: 0 20px;
+                position: relative;
+                z-index: 2;
+                max-width: 1100px;
+                margin: 28px auto 18px;
+                padding: 0 24px;
                 color: var(--muted);
                 text-align: center;
-                font-size: 13px;
+                font-size: 12px;
+                letter-spacing: 0.08em;
             }
 
             @media (max-width: 720px) {
-                h1 { font-size: 28px; }
-                .controls { flex-direction: column; align-items: stretch; }
-                .btn-primary { width: 100%; text-align: center; }
+                body { overflow: auto; }
+                h1 { font-size: 30px; }
+                .btn { width: 100%; text-align: center; }
             }
         </style>
     </head>
     <body>
-        <div class="grid-overlay"></div>
+        <div class="grid-bg"></div>
         <header>
             <div class="brand">
-                <div class="brand-mark">⚡</div>
+                <div class="brand-badge">PS</div>
                 <div>
-                    <div>Project Steve</div>
-                    <div class="pill">Agentic n8n builder</div>
+                    <div>PROJECT STEVE</div>
+                    <div class="pill">GRID BLACK / WHITE</div>
                 </div>
             </div>
         </header>
 
         <main>
-            <div class="hero-card">
-                <div class="layout">
+            <div class="shell">
+                <div class="grid-layout">
                     <div>
-                        <h1>Blacksite-grade automation, in one prompt.</h1>
-                        <p class="lede">Paste your business logic, let the triad (Build, QA, Security) synthesize a hardened n8n workflow, and download instantly.</p>
-                        <div class="chips">
-                            <span class="chip">Zero inline scripts</span>
-                            <span class="chip">Enterprise CSP</span>
-                            <span class="chip">Auto JSON export</span>
+                        <h1>Grid-native, blacksite automation.</h1>
+                        <p class="lede">Paste a requirement, let the Build → QA → Security triad forge a hardened n8n workflow, and auto-download the JSON. Minimal surface, maximum signal.</p>
+                        <div class="tags">
+                            <span class="tag">CSP locked</span>
+                            <span class="tag">Serverless API</span>
+                            <span class="tag">Instant JSON</span>
+                            <span class="tag">No clutter</span>
                         </div>
                     </div>
                     <div class="panel">
-                        <label for="requirements">Describe the automation</label>
-                        <textarea id="requirements" placeholder="Example: Listen to Stripe webhooks, store successful payments in Postgres, send Gmail confirmations, log errors to Slack."></textarea>
+                        <label for="requirements">Prompt / Requirement</label>
+                        <textarea id="requirements" placeholder="Example: Listen to Stripe webhooks, store successes in Postgres, send Gmail confirmations, log errors to Slack."></textarea>
                         <div class="controls">
-                            <button class="btn btn-primary" id="generate-btn">Generate & Download JSON</button>
+                            <button class="btn" id="generate-btn">Generate & Download JSON</button>
                             <span class="status" id="status-text">Ready.</span>
                         </div>
                         <div class="result-panel hidden" id="result-panel">
                             <div class="result-header">
-                                <span>Workflow JSON preview</span>
+                                <span>Workflow JSON</span>
                                 <div class="result-actions">
                                     <button class="copy-btn" id="copy-json-btn">Copy</button>
                                 </div>
@@ -320,7 +329,7 @@
         </main>
 
         <footer>
-            Project Steve — agentic n8n builder · Security-first · Crafted by Karthick
+            PROJECT STEVE · GRID BLACKSITE · BUILT BY KARTHICK
         </footer>
 
         <script src="/app.js" defer></script>
