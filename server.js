@@ -17,9 +17,9 @@ app.use(express.json());
 
 // Add security headers with proper CSP
 app.use((req, res, next) => {
-    res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https:;");
+    res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https:;");
     res.setHeader('X-Content-Type-Options', 'nosniff');
-    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
     res.setHeader('X-XSS-Protection', '1; mode=block');
     next();
 });
@@ -104,10 +104,14 @@ app.post('/api/generate-workflow', async (req, res) => {
 
     } catch (error) {
         console.error('Workflow generation error:', error);
+        console.error('Error name:', error.name);
+        console.error('Error message:', error.message);
+        console.error('Error stack:', error.stack);
         return res.status(500).json({ 
             error: 'Failed to generate workflow',
             details: error.message,
-            stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+            name: error.name,
+            trace: process.env.NODE_ENV === 'development' ? error.stack : 'See server logs for details'
         });
     }
 });
