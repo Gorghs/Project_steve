@@ -111,12 +111,7 @@ PORT=3000              # Server port
 NODE_ENV=development   # Environment
 ```
 
-## 🔗 Connect
 
-- **GitHub**: [gorghs](https://github.com/gorghs)
-- **Email**: karthick.venkatachalem@gmail.com
-- **LinkedIn**: [karthickv4](https://www.linkedin.com/in/karthickv4)
-- **Instagram**: @itz_karthick143
 
 ---
 
