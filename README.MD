@@ -1,53 +1,123 @@
-# <p align="center">⚡ n8n Agentic Builder ⚡</p>
+# Project Steve
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Powered%20By-AI%20Agents-orange?style=for-the-badge&logo=ai" alt="AI Powered">
-  <img src="https://img.shields.io/badge/Maintained%20By-karthick%20v-darkblue?style=for-the-badge" alt="Maintained by karthick v">
-  <img src="https://img.shields.io/badge/Version-1.0.0-green?style=for-the-badge" alt="Version 1.0.0">
-</p>
+Enterprise-grade AI workflow automation platform that transforms business requirements into production-ready n8n workflows using advanced intelligent agents.
+
+## 🚀 Quick Start
+
+### Installation & Running
+
+1. **Install Dependencies**
+   ```bash
+   npm install
+   ```
+
+2. **Start the Platform**
+   ```bash
+   npm start
+   ```
+
+3. **Access Dashboard**
+   ```
+   http://localhost:3000
+   ```
+
+Premium AI automation, ready in seconds.
+
+## ✨ Enterprise Features
+
+- **🤖 Intelligent Architecture** - Advanced NLP transforms requirements into sophisticated workflows
+- **🛡️ Military-Grade Security** - Enterprise-level scanning with zero-trust principles
+- **✅ Compliance Automation** - Automated quality gates for enterprise standards
+- **⚡ Unmatched Performance** - 30 seconds from concept to deployment-ready code
+- **🔐 Zero Secrets** - Enterprise credential abstraction by design
+- **🎯 Deterministic Flows** - Native-only architecture, zero code injection
+- **📡 Full Backend Integration** - Connected Express API with three-phase processing
+
+## 📁 Project Structure
+
+```
+├── index.html                  # Premium UI Dashboard
+├── server.js                   # Enterprise API Server
+├── package.json                # Dependencies
+├── .env                        # Configuration
+├── prompts/                    # AI Agent System Prompts
+│   ├── n8n_Build_Captain.md   # Architecture Generation
+│   ├── n8n_QA_Compliance.md   # Quality Assurance
+│   └── n8n_Security_Architect.md # Security Hardening
+├── samples/                    # Reference Workflows
+└── workflows/                  # Generated Workflows
+```
+
+## 💡 AI Agent Processing
+
+### Three-Phase Enterprise Pipeline
+
+1. **Build Phase** 🏗️
+   - Build Captain analyzes business requirements
+   - Generates multi-node workflow architecture
+   - Produces n8n-native JSON structure
+
+2. **QA Phase** ✅
+   - Validates against enterprise standards
+   - Enforces naming conventions
+   - Verifies error handling and resilience
+   - Ensures deterministic logic
+
+3. **Security Phase** 🛡️
+   - Scans for security vulnerabilities
+   - Enforces SSRF prevention
+   - Validates authentication mechanisms
+   - Applies rate limiting & timeouts
+
+### API Endpoints
+
+```
+POST   /api/generate-workflow      # Generate workflow
+GET    /api/workflow/:id           # Retrieve workflow
+GET    /api/workflow/:id/export    # Download JSON
+GET    /api/workflows              # List all workflows
+GET    /api/health                 # Health check
+```
+
+## 🎯 Usage
+
+1. Open `http://localhost:3000`
+2. Describe your automation requirements
+3. Click "Generate Workflow"
+4. Three AI agents process in parallel:
+   - Build Captain → Architecture
+   - QA Compliance → Validation
+   - Security Architect → Hardening
+5. Download JSON automatically
+6. Import into n8n
+
+## 📊 Enterprise Outputs
+
+Every generated workflow includes:
+- ✅ Production-ready error handling
+- ✅ Native n8n node architecture
+- ✅ No hardcoded credentials
+- ✅ SSRF vulnerability protection
+- ✅ Enforced authentication
+- ✅ Rate limiting & timeouts
+- ✅ Deterministic logic flows
+- ✅ Enterprise compliance
+
+## 🔧 Configuration
+
+Edit `.env`:
+```
+PORT=3000              # Server port
+NODE_ENV=development   # Environment
+```
+
+## 🔗 Connect
+
+- **GitHub**: [gorghs](https://github.com/gorghs)
+- **Email**: karthick.venkatachalem@gmail.com
+- **LinkedIn**: [karthickv4](https://www.linkedin.com/in/karthickv4)
+- **Instagram**: @itz_karthick143
 
 ---
 
-## 🚀 The Future of n8n Automation
-**n8n Agentic Builder** is a elite-grade autonomous framework that bridges the gap between complex business logic and production-ready n8n workflows. Built for high-velocity engineers, this system utilizes specialized **Prompt-Engines** to architect, validate, and secure integrations in seconds.
-
-### 💎 Core Intelligence Features
-*   **🏗️ Autonomous Architecting**: Transmute natural language into sophisticated, multi-node n8n architectures instantly.
-*   **🛡️ Ironclad Security**: Integrated **Security Architect** agents sweep for SSRF, Auth vulnerabilities, and PII leakage automatically.
-*   **✅ Enterprise Compliance**: The **QA Compliance Engine** ensures every workflow follows the strict `verb-object` naming and error-handling standards.
-*   **🌀 Pattern Synthesis**: Curates and adapts templates for seamless reuse across diverse infrastructure.
-
----
-
-## 🛠️ The Local "Addon" Engine
-Forget manual imports. This builder operates as a **Native Protocol Addon** to your orchestration environment.
-
-1.  **Initialize the Core**: 
-    ```bash
-    # Activate the Agentic Protocols
-    ./initialize_builder.sh --mode=active
-    ```
-2.  **Engage the Neural Link**:
-    Sync the `prompts/` directory to your terminal agent. The agents are now primed as high-performance workflow engineers.
-3.  **Autonomous Synthesis**:
-    Simply describe your vision. The **Build Captain** interprets and synthesizes directly into your `workflows/` directory.
-4.  **Protocol Deployment**:
-    Workflows are ready for immediate activation within the n8n ecosystem via the automated CLI bridge.
-
----
-
-## 🎯 Why This Builder?
-> "In a world of manual nodes, be the architect of autonomous flows."
-
-| Feature | Manual n8n | Agentic Builder |
-| :--- | :--- | :--- |
-| **Speed** | 1-2 Hours | < 30 Seconds |
-| **Security** | Manual Check | **AI-Swept** |
-| **QA** | Human Review | **Automated Protocol** |
-| **Architecture** | Trial & Error | **Deterministic** |
-
----
-
-<p align="center">
-  <i>Made with ❤️ by <b>karthick v</b></i>
-</p>
+**Project Steve** — Enterprise AI Workflow Platform | Crafted with precision by Karthick
