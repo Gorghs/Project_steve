@@ -28,11 +28,25 @@
     try {
       const response = await fetch('/api/generate-workflow', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Key': 'default-api-key-change-in-production'
+        },
         body: JSON.stringify({ requirements })
       });
 
-      const data = await response.json();
+      console.log('Response status:', response.status);
+      
+      const text = await response.text();
+      console.log('Raw response:', text.substring(0, 200));
+      
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        console.error('Failed to parse JSON. Raw text:', text);
+        throw new Error(`Invalid JSON response: ${text.substring(0, 100)}`);
+      }
 
       if (!response.ok) {
         throw new Error(data.error || data.details || `HTTP ${response.status}`);
@@ -46,7 +60,21 @@
         resultPanel.classList.remove('hidden');
       }
 
-      window.location.href = `/api/workflow/${workflowId}/export`;
+      // Download the workflow file
+      try {
+        const exportResponse = await fetch(`/api/workflow/${workflowId}/export`, {
+          headers: { 'X-API-Key': 'default-api-key-change-in-production' }
+        });
+        const blob = await exportResponse.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `workflow_${workflowId}.json`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      } catch (downloadErr) {
+        console.error('Download error:', downloadErr);
+      }
     } catch (error) {
       console.error('Error:', error);
       setStatus('Failed. See alert.', false);
