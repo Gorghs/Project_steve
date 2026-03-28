@@ -1,118 +1,180 @@
-# Project Steve
+# Project Steve - Secure Workflow Automation API
 
-Enterprise-grade AI workflow automation platform that transforms business requirements into production-ready n8n workflows using advanced intelligent agents.
+**FastAPI-powered backend for intelligent workflow generation with three-phase processing: Build → QA → Security.**
+
+> Paste a requirement, get a hardened n8n workflow JSON. Minimal surface, maximum signal.
 
 ## 🚀 Quick Start
 
-### Installation & Running
-
-1. **Install Dependencies**
-   ```bash
-   npm install
-   ```
-
-2. **Start the Platform**
-   ```bash
-   npm start
-   ```
-
-3. **Access Dashboard**
-   ```
-   http://localhost:3000
-   ```
-
-Premium AI automation, ready in seconds.
-
-## ✨ Enterprise Features
-
-- **🤖 Intelligent Architecture** - Advanced NLP transforms requirements into sophisticated workflows
-- **🛡️ Military-Grade Security** - Enterprise-level scanning with zero-trust principles
-- **✅ Compliance Automation** - Automated quality gates for enterprise standards
-- **⚡ Unmatched Performance** - 30 seconds from concept to deployment-ready code
-- **🔐 Zero Secrets** - Enterprise credential abstraction by design
-- **🎯 Deterministic Flows** - Native-only architecture, zero code injection
-- **📡 Full Backend Integration** - Connected Express API with three-phase processing
-
-## 📁 Project Structure
-
-```
-├── index.html                  # Premium UI Dashboard
-├── server.js                   # Enterprise API Server
-├── package.json                # Dependencies
-├── .env                        # Configuration
-├── prompts/                    # AI Agent System Prompts
-│   ├── n8n_Build_Captain.md   # Architecture Generation
-│   ├── n8n_QA_Compliance.md   # Quality Assurance
-│   └── n8n_Security_Architect.md # Security Hardening
-├── samples/                    # Reference Workflows
-└── workflows/                  # Generated Workflows
+### Installation
+```bash
+pip install -r requirements.txt
 ```
 
-## 💡 AI Agent Processing
-
-### Three-Phase Enterprise Pipeline
-
-1. **Build Phase** 🏗️
-   - Build Captain analyzes business requirements
-   - Generates multi-node workflow architecture
-   - Produces n8n-native JSON structure
-
-2. **QA Phase** ✅
-   - Validates against enterprise standards
-   - Enforces naming conventions
-   - Verifies error handling and resilience
-   - Ensures deterministic logic
-
-3. **Security Phase** 🛡️
-   - Scans for security vulnerabilities
-   - Enforces SSRF prevention
-   - Validates authentication mechanisms
-   - Applies rate limiting & timeouts
-
-### API Endpoints
-
-```
-POST   /api/generate-workflow      # Generate workflow
-GET    /api/workflow/:id           # Retrieve workflow
-GET    /api/workflow/:id/export    # Download JSON
-GET    /api/workflows              # List all workflows
-GET    /api/health                 # Health check
+### Run Server
+```bash
+uvicorn app.main:app --reload
 ```
 
-## 🎯 Usage
+### Access
+- **Frontend:** `http://localhost:8000`
+- **Swagger Docs:** `http://localhost:8000/docs`
+- **API Health:** `http://localhost:8000/api/health`
 
-1. Open `http://localhost:3000`
-2. Describe your automation requirements
-3. Click "Generate Workflow"
-4. Three AI agents process in parallel:
-   - Build Captain → Architecture
-   - QA Compliance → Validation
-   - Security Architect → Hardening
-5. Download JSON automatically
-6. Import into n8n
+Production-ready workflow generation in seconds.
 
-## 📊 Enterprise Outputs
+## ✨ Core Features
 
-Every generated workflow includes:
-- ✅ Production-ready error handling
-- ✅ Native n8n node architecture
-- ✅ No hardcoded credentials
-- ✅ SSRF vulnerability protection
-- ✅ Enforced authentication
-- ✅ Rate limiting & timeouts
-- ✅ Deterministic logic flows
-- ✅ Enterprise compliance
+- **🔄 Three-Phase Pipeline** - Build → QA → Security validation
+- **⚡ Instant JSON** - Convert prompts to n8n workflows instantly
+- **🛡️ API Key Auth** - Secure endpoints with X-API-Key
+- **📊 Structured Logging** - JSON-formatted request tracking
+- **🌐 CORS Ready** - Works with any frontend
+- **💾 In-Memory Storage** - Fast, stateless management
+- **📥 Export Workflows** - Download as JSON files
+- **📚 Interactive Docs** - Swagger & ReDoc built-in
+
+## 📁 Architecture
+
+```
+app/
+├── main.py                    # FastAPI + middleware + static files
+├── routes/
+│   └── workflow.py           # 5 workflow endpoints
+├── services/
+│   └── workflow_service.py   # 3-phase logic
+├── schemas.py                # Pydantic models
+├── auth.py                   # API key authentication
+└── logger.py                 # JSON logging
+```
+
+## � Three-Phase Processing
+
+### Phase 1: Build 🏗️
+Creates workflow architecture with nodes, connections, and requirements
+
+### Phase 2: QA ✅
+Validates structure, transforms naming, runs 4 compliance checks
+
+### Phase 3: Security 🛡️
+Adds timeout, retries, rate limiting, SSL verification, SSRF prevention
+
+## 📡 API Endpoints
+
+| Method | Path | Auth | Purpose |
+|--------|------|------|---------|
+| `GET` | `/` | NO | Serves frontend |
+| `GET` | `/api/health` | NO | Health check |
+| `POST` | `/api/generate-workflow` | YES | Generate workflow |
+| `GET` | `/api/workflow/{id}` | YES | Get workflow |
+| `GET` | `/api/workflow/{id}/export` | YES | Download JSON |
+| `GET` | `/api/workflows` | YES | List all |
+
+## 💡 Usage
+
+### Web UI
+1. Open `http://localhost:8000`
+2. Type your requirement
+3. Click "Generate & Download JSON"
+4. Three phases execute automatically
+5. JSON downloads instantly
+
+### API
+```bash
+curl -X POST http://localhost:8000/api/generate-workflow \
+  -H "X-API-Key: default-api-key-change-in-production" \
+  -H "Content-Type: application/json" \
+  -d '{"requirements":"Email notification workflow"}'
+```
+
+## 📊 Response Example
+
+```json
+{
+  "success": true,
+  "workflow_id": "1234567890",
+  "workflow": {
+    "name": "Generated Workflow",
+    "nodes": [...],
+    "connections": [...],
+    "security": {
+      "timeout": 300,
+      "retryCount": 3
+    }
+  },
+  "phases": {
+    "build": {...},
+    "qa": {...},
+    "security": {...}
+  }
+}
+```
 
 ## 🔧 Configuration
 
-Edit `.env`:
-```
-PORT=3000              # Server port
-NODE_ENV=development   # Environment
+**Environment Variables**
+```bash
+API_KEY=your-secure-key-here  # Default: default-api-key-change-in-production
 ```
 
+**Server**
+- Host: `0.0.0.0`
+- Port: `8000`
+- Reload: Enabled in dev mode
 
+**Authentication**
+- Header: `X-API-Key`
+- Required for all `/api/*` endpoints (except `/health`)
+
+## 🧪 Testing
+
+```bash
+# Health check
+curl http://localhost:8000/api/health
+
+# List workflows
+curl http://localhost:8000/api/workflows \
+  -H "X-API-Key: default-api-key-change-in-production"
+
+# Generate workflow
+curl -X POST http://localhost:8000/api/generate-workflow \
+  -H "X-API-Key: default-api-key-change-in-production" \
+  -H "Content-Type: application/json" \
+  -d '{"requirements":"Your requirement here"}'
+```
+
+## 📚 Documentation
+
+- **Interactive Docs:** `http://localhost:8000/docs` (Swagger)
+- **Alternative Docs:** `http://localhost:8000/redoc`
+- **Full Report:** See [VERIFICATION_REPORT.md](VERIFICATION_REPORT.md)
+
+## 🛡️ Security
+
+- **CSP:** Content Security Policy enabled
+- **HSTS:** HTTP Strict Transport Security
+- **CORS:** Configured for all origins
+- **API Key Auth:** Token-based protection
+- **SSRF Prevention:** Built-in
+- **Data:** In-memory (no persistence)
+
+## 📦 Tech Stack
+
+- **Framework:** FastAPI 0.104.1
+- **Server:** Uvicorn 0.24.0
+- **Validation:** Pydantic 2.5.0
+- **Config:** python-dotenv 1.0.0
+- **Frontend:** Vanilla HTML/CSS/JS
+
+## ✅ Status
+
+**Production Ready**
+- All endpoints tested
+- Full error handling
+- Security headers configured
+- Documentation complete
+- Workflows stored in-memory
 
 ---
 
-**Project Steve** — Enterprise AI Workflow Platform | Crafted with precision by Karthick
+**Project Steve** — FastAPI Backend | Intelligent Workflow Automation | 2026
