@@ -16,10 +16,7 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
 
-### Access
-- **Frontend:** `http://localhost:8000`
-- **Swagger Docs:** `http://localhost:8000/docs`
-- **API Health:** `http://localhost:8000/api/health`
+
 
 Production-ready workflow generation in seconds.
 
@@ -59,17 +56,6 @@ Validates structure, transforms naming, runs 4 compliance checks
 ### Phase 3: Security 🛡️
 Adds timeout, retries, rate limiting, SSL verification, SSRF prevention
 
-## 📡 API Endpoints
-
-| Method | Path | Auth | Purpose |
-|--------|------|------|---------|
-| `GET` | `/` | NO | Serves frontend |
-| `GET` | `/api/health` | NO | Health check |
-| `POST` | `/api/generate-workflow` | YES | Generate workflow |
-| `GET` | `/api/workflow/{id}` | YES | Get workflow |
-| `GET` | `/api/workflow/{id}/export` | YES | Download JSON |
-| `GET` | `/api/workflows` | YES | List all |
-
 ## 💡 Usage
 
 ### Web UI
@@ -78,86 +64,6 @@ Adds timeout, retries, rate limiting, SSL verification, SSRF prevention
 3. Click "Generate & Download JSON"
 4. Three phases execute automatically
 5. JSON downloads instantly
-
-### API
-```bash
-curl -X POST http://localhost:8000/api/generate-workflow \
-  -H "X-API-Key: default-api-key-change-in-production" \
-  -H "Content-Type: application/json" \
-  -d '{"requirements":"Email notification workflow"}'
-```
-
-## 📊 Response Example
-
-```json
-{
-  "success": true,
-  "workflow_id": "1234567890",
-  "workflow": {
-    "name": "Generated Workflow",
-    "nodes": [...],
-    "connections": [...],
-    "security": {
-      "timeout": 300,
-      "retryCount": 3
-    }
-  },
-  "phases": {
-    "build": {...},
-    "qa": {...},
-    "security": {...}
-  }
-}
-```
-
-## 🔧 Configuration
-
-**Environment Variables**
-```bash
-API_KEY=your-secure-key-here  # Default: default-api-key-change-in-production
-```
-
-**Server**
-- Host: `0.0.0.0`
-- Port: `8000`
-- Reload: Enabled in dev mode
-
-**Authentication**
-- Header: `X-API-Key`
-- Required for all `/api/*` endpoints (except `/health`)
-
-## 🧪 Testing
-
-```bash
-# Health check
-curl http://localhost:8000/api/health
-
-# List workflows
-curl http://localhost:8000/api/workflows \
-  -H "X-API-Key: default-api-key-change-in-production"
-
-# Generate workflow
-curl -X POST http://localhost:8000/api/generate-workflow \
-  -H "X-API-Key: default-api-key-change-in-production" \
-  -H "Content-Type: application/json" \
-  -d '{"requirements":"Your requirement here"}'
-```
-
-## 📚 Documentation
-
-- **Interactive Docs:** `http://localhost:8000/docs` (Swagger)
-- **Alternative Docs:** `http://localhost:8000/redoc`
-- **Full Report:** See [VERIFICATION_REPORT.md](VERIFICATION_REPORT.md)
-
-## 🛡️ Security
-
-- **CSP:** Content Security Policy enabled
-- **HSTS:** HTTP Strict Transport Security
-- **CORS:** Configured for all origins
-- **API Key Auth:** Token-based protection
-- **SSRF Prevention:** Built-in
-- **Data:** In-memory (no persistence)
-
 ## 📦 Tech Stack
 
 - **Framework:** FastAPI 0.104.1
