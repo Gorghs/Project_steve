@@ -29,9 +29,11 @@ const generatedWorkflows = {};
 
 // ==================== API ROUTES (MUST BE FIRST) ====================
 
-// Favicon endpoint
+// Favicon endpoint - serves the real icon, falls back to 204 if unavailable
 app.get('/favicon.ico', (req, res) => {
-    res.status(204).end();
+    res.sendFile(path.join(__dirname, 'favicon.ico'), (err) => {
+        if (err) res.status(204).end();
+    });
 });
 
 // Health check
@@ -332,7 +334,28 @@ async function securityPhase(workflow) {
 
 // ==================== ERROR HANDLING ====================
 
-// Serve static files AFTER API routes so API routes take precedence
+// Serve static files AFTER API routes so API routes take precedence.
+// Only the files the public site needs are exposed - the repository root
+// (source code, .git, node_modules, prompts) must never be served.
+const PUBLIC_FILES = new Set([
+    '/',
+    '/index.html',
+    '/app.js',
+    '/robots.txt',
+    '/sitemap.xml',
+    '/favicon.ico'
+]);
+const PUBLIC_PREFIXES = ['/assets/'];
+
+app.use((req, res, next) => {
+    const requestPath = req.path;
+    const allowed = PUBLIC_FILES.has(requestPath) ||
+        PUBLIC_PREFIXES.some(prefix => requestPath.startsWith(prefix));
+
+    if (allowed) return next();
+    return res.status(404).json({ error: 'Endpoint not found' });
+});
+
 app.use(express.static(path.join(__dirname)));
 
 // Error handler for server errors

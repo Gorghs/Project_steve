@@ -1,0 +1,918 @@
+/* --------------------------------------------------------------------------
+   Project Steve - floating 3D sticker field
+   40 unique Icons8 3D-Fluency illustrations scattered evenly over the whole
+   page: a jittered field of rows above and below the hero, plus two outer
+   columns per side through the hero band. Each has its own rotation,
+   float duration and NEGATIVE delay, so the set never pulses in unison.
+   The side columns are clamped clear of the centred content column, so a
+   sticker can never cover text or a control.
+   -------------------------------------------------------------------------- */
+
+.sticker-field {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+
+    /* the centred content column the side stickers must stay clear of.
+       It tracks the real width: the hero is min(1160px, 100vw - 300px). */
+    --sk-col: min(1160px, calc(100vw - 300px));
+    /* minimum clearance kept between a side sticker and that column */
+    --sk-gap: 22px;
+}
+
+/* The soft contact shadow is a pseudo-element, not a filter on the <img>:
+   a drop-shadow filter inflates the image's painted area and would make a
+   decorative picture the Largest Contentful Paint instead of the headline. */
+.sticker-field .sticker > img.sticker-img {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.sticker-field .sticker {
+    position: absolute;
+    display: block;
+    width: var(--w);
+    height: var(--w);
+    left: var(--x);
+    top: var(--y);
+    right: auto;
+    bottom: auto;
+
+    /* the anchor is the sticker's centre */
+    transform: translate(-50%, -50%) rotate(var(--rot, 0deg));
+
+    animation: sticker-float var(--dur, 8s) cubic-bezier(.45, 0, .55, 1) infinite;
+    animation-delay: var(--delay, 0s);
+
+    user-select: none;
+    -webkit-user-drag: none;
+    will-change: transform;
+
+    /* safety net: no sticker may ever grow past a fifth of the viewport */
+    max-width: 22vw;
+    max-height: 22vw;
+}
+
+.sticker-field .sticker::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 4%;
+    width: 64%;
+    height: 24%;
+    transform: translateX(-50%);
+    background: radial-gradient(closest-side, rgba(28, 28, 28, .22), transparent 74%);
+    filter: blur(4px);
+    z-index: -1;
+    pointer-events: none;
+}
+
+@keyframes sticker-float {
+    0%, 100% { transform: translate(-50%, -50%) rotate(var(--rot, 0deg)); }
+    50% {
+        transform:
+            translate(-50%, calc(-50% + var(--lift, -12px)))
+            rotate(calc(var(--rot, 0deg) + var(--sway, 4deg)));
+    }
+}
+
+/* --------------------------------------------------------------------------
+   SIDE COLUMNS - three-way clamp: keep the rotated sticker on screen, honour
+   the authored --x, and stay --sk-gap clear of the content column.
+   --sk-size shrinks a sticker when the gutter is too narrow, so the column
+   degrades gracefully instead of jumping over the content.
+   -------------------------------------------------------------------------- */
+
+.sticker-field .s16, .sticker-field .s17, .sticker-field .s20, .sticker-field .s21, .sticker-field .s24, .sticker-field .s25 {
+    --sk-size: min(
+        var(--w),
+        calc((100% - var(--sk-col)) / 2 - var(--sk-gap) - 2px)
+    );
+    width: var(--sk-size);
+    height: auto;
+    aspect-ratio: 1 / 1;
+    right: auto;
+    left: clamp(
+        calc(var(--sk-h) + 2px),
+        var(--x),
+        calc((100% - var(--sk-col)) / 2 - var(--sk-gap) - var(--w) / 2 - var(--sk-h))
+    );
+}
+
+.sticker-field .s18, .sticker-field .s19, .sticker-field .s22, .sticker-field .s23, .sticker-field .s26, .sticker-field .s27 {
+    --sk-size: min(
+        var(--w),
+        calc((100% - var(--sk-col)) / 2 - var(--sk-gap) - 2px)
+    );
+    width: var(--sk-size);
+    height: auto;
+    aspect-ratio: 1 / 1;
+    left: auto;
+    right: clamp(
+        calc(var(--sk-h) + 2px),
+        calc(100% - var(--x)),
+        calc((100% - var(--sk-col)) / 2 - var(--sk-gap) - var(--w) / 2 - var(--sk-h))
+    );
+}
+
+/* --------------------------------------------------------------------------
+   PER-STICKER PLACEMENT
+   -------------------------------------------------------------------------- */
+
+    .sticker-field .s01 {
+        /* robot */
+        --x: 10.6%;
+        --y: 4.9%;
+        --w: 56px;
+        --sk-h: 35.6px;
+        --rot: -12deg;
+        --dur: 8.0s;
+        --delay: -0.6s;
+        --lift: -8px;
+        --sway: 7deg;
+    }
+    .sticker-field .s02 {
+        /* robot-2 */
+        --x: 23.6%;
+        --y: 5.3%;
+        --w: 48px;
+        --sk-h: 28.8px;
+        --rot: -5deg;
+        --dur: 10.7s;
+        --delay: -1.43s;
+        --lift: -10px;
+        --sway: -8deg;
+    }
+    .sticker-field .s03 {
+        /* rocket */
+        --x: 36.6%;
+        --y: 5.7%;
+        --w: 52px;
+        --sk-h: 29.7px;
+        --rot: 2deg;
+        --dur: 8.0s;
+        --delay: -2.26s;
+        --lift: -12px;
+        --sway: 7deg;
+    }
+    .sticker-field .s04 {
+        /* gear */
+        --x: 45.5%;
+        --y: 6.1%;
+        --w: 44px;
+        --sk-h: 27.5px;
+        --rot: 9deg;
+        --dur: 10.7s;
+        --delay: -3.09s;
+        --lift: -8px;
+        --sway: -8deg;
+    }
+    .sticker-field .s05 {
+        /* lightning-bolt */
+        --x: 58.5%;
+        --y: 6.4%;
+        --w: 50px;
+        --sk-h: 30.9px;
+        --rot: -9deg;
+        --dur: 8.0s;
+        --delay: -3.92s;
+        --lift: -10px;
+        --sway: 7deg;
+    }
+    .sticker-field .s06 {
+        /* shield */
+        --x: 71.5%;
+        --y: 6.8%;
+        --w: 54px;
+        --sk-h: 31.3px;
+        --rot: -2deg;
+        --dur: 10.7s;
+        --delay: -4.749999999999999s;
+        --lift: -12px;
+        --sway: -8deg;
+    }
+    .sticker-field .s07 {
+        /* checkmark */
+        --x: 80.4%;
+        --y: 7.2%;
+        --w: 46px;
+        --sk-h: 27.3px;
+        --rot: 5deg;
+        --dur: 8.0s;
+        --delay: -5.579999999999999s;
+        --lift: -8px;
+        --sway: 7deg;
+    }
+    .sticker-field .s08 {
+        /* puzzle */
+        --x: 3.1%;
+        --y: 17.2%;
+        --w: 46px;
+        --sk-h: 29.2px;
+        --rot: -12deg;
+        --dur: 8.0s;
+        --delay: -0.6s;
+        --lift: -8px;
+        --sway: 7deg;
+    }
+    .sticker-field .s09 {
+        /* brain */
+        --x: 16.1%;
+        --y: 17.6%;
+        --w: 54px;
+        --sk-h: 32.4px;
+        --rot: -5deg;
+        --dur: 10.7s;
+        --delay: -1.43s;
+        --lift: -10px;
+        --sway: -8deg;
+    }
+    .sticker-field .s10 {
+        /* chart */
+        --x: 29.1%;
+        --y: 18.0%;
+        --w: 48px;
+        --sk-h: 27.5px;
+        --rot: 2deg;
+        --dur: 8.0s;
+        --delay: -2.26s;
+        --lift: -12px;
+        --sway: 7deg;
+    }
+    .sticker-field .s11 {
+        /* line-chart */
+        --x: 38.0%;
+        --y: 18.4%;
+        --w: 52px;
+        --sk-h: 32.5px;
+        --rot: 9deg;
+        --dur: 10.7s;
+        --delay: -3.09s;
+        --lift: -8px;
+        --sway: -8deg;
+    }
+    .sticker-field .s12 {
+        /* cloud */
+        --x: 51.0%;
+        --y: 18.7%;
+        --w: 44px;
+        --sk-h: 27.2px;
+        --rot: -9deg;
+        --dur: 8.0s;
+        --delay: -3.92s;
+        --lift: -10px;
+        --sway: 7deg;
+    }
+    .sticker-field .s13 {
+        /* database */
+        --x: 64.0%;
+        --y: 19.1%;
+        --w: 50px;
+        --sk-h: 29.0px;
+        --rot: -2deg;
+        --dur: 10.7s;
+        --delay: -4.749999999999999s;
+        --lift: -12px;
+        --sway: -8deg;
+    }
+    .sticker-field .s14 {
+        /* lock */
+        --x: 72.9%;
+        --y: 19.5%;
+        --w: 56px;
+        --sk-h: 33.2px;
+        --rot: 5deg;
+        --dur: 8.0s;
+        --delay: -5.579999999999999s;
+        --lift: -8px;
+        --sway: 7deg;
+    }
+    .sticker-field .s15 {
+        /* idea */
+        --x: 85.9%;
+        --y: 19.9%;
+        --w: 46px;
+        --sk-h: 29.5px;
+        --rot: 12deg;
+        --dur: 10.7s;
+        --delay: -6.409999999999999s;
+        --lift: -10px;
+        --sway: -8deg;
+    }
+    .sticker-field .s16 {
+        /* sparkles */
+        --x: 2.4%;
+        --y: 32.5%;
+        --w: 36px;
+        --sk-h: 22.9px;
+        --rot: -12deg;
+        --dur: 8.4s;
+        --delay: -0.9s;
+        --lift: -8px;
+        --sway: 7deg;
+    }
+    .sticker-field .s17 {
+        /* trophy */
+        --x: 6.8%;
+        --y: 32.5%;
+        --w: 34px;
+        --sk-h: 20.6px;
+        --rot: -6deg;
+        --dur: 10.8s;
+        --delay: -2.0s;
+        --lift: -8px;
+        --sway: -8deg;
+    }
+    .sticker-field .s18 {
+        /* workflow */
+        --x: 93.2%;
+        --y: 32.5%;
+        --w: 36px;
+        --sk-h: 20.1px;
+        --rot: 0deg;
+        --dur: 9.200000000000001s;
+        --delay: -3.1s;
+        --lift: -8px;
+        --sway: 7deg;
+    }
+    .sticker-field .s19 {
+        /* code */
+        --x: 97.6%;
+        --y: 32.5%;
+        --w: 34px;
+        --sk-h: 20.6px;
+        --rot: 6deg;
+        --dur: 11.600000000000001s;
+        --delay: -4.2s;
+        --lift: -8px;
+        --sway: -8deg;
+    }
+    .sticker-field .s20 {
+        /* plug */
+        --x: 2.4%;
+        --y: 45.5%;
+        --w: 36px;
+        --sk-h: 22.9px;
+        --rot: -12deg;
+        --dur: 8.4s;
+        --delay: -0.9s;
+        --lift: -8px;
+        --sway: 7deg;
+    }
+    .sticker-field .s21 {
+        /* bot */
+        --x: 6.8%;
+        --y: 45.5%;
+        --w: 34px;
+        --sk-h: 20.6px;
+        --rot: -6deg;
+        --dur: 10.8s;
+        --delay: -2.0s;
+        --lift: -8px;
+        --sway: -8deg;
+    }
+    .sticker-field .s22 {
+        /* server */
+        --x: 93.2%;
+        --y: 45.5%;
+        --w: 36px;
+        --sk-h: 20.1px;
+        --rot: 0deg;
+        --dur: 9.200000000000001s;
+        --delay: -3.1s;
+        --lift: -8px;
+        --sway: 7deg;
+    }
+    .sticker-field .s23 {
+        /* api */
+        --x: 97.6%;
+        --y: 45.5%;
+        --w: 34px;
+        --sk-h: 20.6px;
+        --rot: 6deg;
+        --dur: 11.600000000000001s;
+        --delay: -4.2s;
+        --lift: -8px;
+        --sway: -8deg;
+    }
+    .sticker-field .s24 {
+        /* chip */
+        --x: 2.4%;
+        --y: 58.5%;
+        --w: 36px;
+        --sk-h: 22.9px;
+        --rot: -12deg;
+        --dur: 8.4s;
+        --delay: -0.9s;
+        --lift: -8px;
+        --sway: 7deg;
+    }
+    .sticker-field .s25 {
+        /* cursor */
+        --x: 6.8%;
+        --y: 58.5%;
+        --w: 34px;
+        --sk-h: 20.6px;
+        --rot: -6deg;
+        --dur: 10.8s;
+        --delay: -2.0s;
+        --lift: -8px;
+        --sway: -8deg;
+    }
+    .sticker-field .s26 {
+        /* calculator */
+        --x: 93.2%;
+        --y: 58.5%;
+        --w: 36px;
+        --sk-h: 20.1px;
+        --rot: 0deg;
+        --dur: 9.200000000000001s;
+        --delay: -3.1s;
+        --lift: -8px;
+        --sway: 7deg;
+    }
+    .sticker-field .s27 {
+        /* clock */
+        --x: 97.6%;
+        --y: 58.5%;
+        --w: 34px;
+        --sk-h: 20.6px;
+        --rot: 6deg;
+        --dur: 11.600000000000001s;
+        --delay: -4.2s;
+        --lift: -8px;
+        --sway: -8deg;
+    }
+    .sticker-field .s28 {
+        /* hourglass */
+        --x: 3.1%;
+        --y: 68.2%;
+        --w: 50px;
+        --sk-h: 31.8px;
+        --rot: -12deg;
+        --dur: 8.0s;
+        --delay: -0.6s;
+        --lift: -8px;
+        --sway: 7deg;
+    }
+    .sticker-field .s29 {
+        /* key */
+        --x: 16.1%;
+        --y: 68.6%;
+        --w: 44px;
+        --sk-h: 26.4px;
+        --rot: -5deg;
+        --dur: 10.7s;
+        --delay: -1.43s;
+        --lift: -10px;
+        --sway: -8deg;
+    }
+    .sticker-field .s30 {
+        /* star */
+        --x: 29.1%;
+        --y: 69.0%;
+        --w: 54px;
+        --sk-h: 30.9px;
+        --rot: 2deg;
+        --dur: 8.0s;
+        --delay: -2.26s;
+        --lift: -12px;
+        --sway: 7deg;
+    }
+    .sticker-field .s31 {
+        /* medal */
+        --x: 38.0%;
+        --y: 69.4%;
+        --w: 48px;
+        --sk-h: 30.0px;
+        --rot: 9deg;
+        --dur: 10.7s;
+        --delay: -3.09s;
+        --lift: -8px;
+        --sway: -8deg;
+    }
+    .sticker-field .s32 {
+        /* crown */
+        --x: 51.0%;
+        --y: 69.7%;
+        --w: 52px;
+        --sk-h: 32.2px;
+        --rot: -9deg;
+        --dur: 8.0s;
+        --delay: -3.92s;
+        --lift: -10px;
+        --sway: 7deg;
+    }
+    .sticker-field .s33 {
+        /* compass */
+        --x: 69.5%;
+        --y: 70.1%;
+        --w: 56px;
+        --sk-h: 32.4px;
+        --rot: -2deg;
+        --dur: 10.7s;
+        --delay: -4.749999999999999s;
+        --lift: -12px;
+        --sway: -8deg;
+    }
+    .sticker-field .s34 {
+        /* book */
+        --x: 84.4%;
+        --y: 70.5%;
+        --w: 48px;
+        --sk-h: 28.5px;
+        --rot: 5deg;
+        --dur: 8.0s;
+        --delay: -5.579999999999999s;
+        --lift: -8px;
+        --sway: 7deg;
+    }
+    .sticker-field .s35 {
+        /* microscope */
+        --x: 10.6%;
+        --y: 77.2%;
+        --w: 46px;
+        --sk-h: 27.6px;
+        --rot: -6deg;
+        --dur: 8.0s;
+        --delay: -0.6s;
+        --lift: -8px;
+        --sway: 7deg;
+    }
+    .sticker-field .s36 {
+        /* test-tube */
+        --x: 23.6%;
+        --y: 77.6%;
+        --w: 52px;
+        --sk-h: 29.7px;
+        --rot: 1deg;
+        --dur: 10.7s;
+        --delay: -1.43s;
+        --lift: -10px;
+        --sway: -8deg;
+    }
+    .sticker-field .s37 {
+        /* firewall */
+        --x: 36.6%;
+        --y: 78.0%;
+        --w: 44px;
+        --sk-h: 26.9px;
+        --rot: 8deg;
+        --dur: 8.0s;
+        --delay: -2.26s;
+        --lift: -12px;
+        --sway: 7deg;
+    }
+    .sticker-field .s38 {
+        /* bug */
+        --x: 45.5%;
+        --y: 78.4%;
+        --w: 50px;
+        --sk-h: 32.8px;
+        --rot: 15deg;
+        --dur: 10.7s;
+        --delay: -3.09s;
+        --lift: -8px;
+        --sway: -8deg;
+    }
+    .sticker-field .s39 {
+        /* layers */
+        --x: 62.0%;
+        --y: 78.7%;
+        --w: 56px;
+        --sk-h: 32.4px;
+        --rot: -3deg;
+        --dur: 8.0s;
+        --delay: -3.92s;
+        --lift: -10px;
+        --sway: 7deg;
+    }
+    .sticker-field .s40 {
+        /* satellite */
+        --x: 79.5%;
+        --y: 79.1%;
+        --w: 48px;
+        --sk-h: 28.5px;
+        --rot: 4deg;
+        --dur: 10.7s;
+        --delay: -4.749999999999999s;
+        --lift: -12px;
+        --sway: -8deg;
+    }
+    .sticker-field .s41 {
+        /* gear - top left area */
+        --x: 8%;
+        --y: 12%;
+        --w: 40px;
+        --sk-h: 25px;
+        --rot: 15deg;
+        --dur: 9.5s;
+        --delay: -1.2s;
+        --lift: -6px;
+        --sway: 5deg;
+    }
+    .sticker-field .s42 {
+        /* code - top right area */
+        --x: 88%;
+        --y: 14%;
+        --w: 38px;
+        --sk-h: 23px;
+        --rot: -8deg;
+        --dur: 11.2s;
+        --delay: -2.8s;
+        --lift: -8px;
+        --sway: -6deg;
+    }
+    .sticker-field .s43 {
+        /* database - middle left */
+        --x: 12%;
+        --y: 52%;
+        --w: 36px;
+        --sk-h: 22px;
+        --rot: 5deg;
+        --dur: 10.1s;
+        --delay: -4.1s;
+        --lift: -5px;
+        --sway: 4deg;
+    }
+    .sticker-field .s44 {
+        /* robot - middle right */
+        --x: 85%;
+        --y: 55%;
+        --w: 42px;
+        --sk-h: 26px;
+        --rot: -10deg;
+        --dur: 9.8s;
+        --delay: -5.3s;
+        --lift: -7px;
+        --sway: -5deg;
+    }
+    .sticker-field .s45 {
+        /* plug - bottom left */
+        --x: 18%;
+        --y: 88%;
+        --w: 38px;
+        --sk-h: 24px;
+        --rot: 12deg;
+        --dur: 10.5s;
+        --delay: -0.7s;
+        --lift: -6px;
+        --sway: 6deg;
+    }
+    .sticker-field .s46 {
+        /* lightning-bolt - bottom right */
+        --x: 82%;
+        --y: 85%;
+        --w: 36px;
+        --sk-h: 22px;
+        --rot: -6deg;
+        --dur: 8.8s;
+        --delay: -3.5s;
+        --lift: -5px;
+        --sway: -4deg;
+    }
+
+@media (max-width: 1099px) {
+
+    /* the side columns retire: the content column is full width here */
+    .sticker-field .s05, .sticker-field .s06, .sticker-field .s07, .sticker-field .s08, .sticker-field .s09, .sticker-field .s10, .sticker-field .s11, .sticker-field .s12, .sticker-field .s13, .sticker-field .s14, .sticker-field .s15, .sticker-field .s16, .sticker-field .s17, .sticker-field .s18, .sticker-field .s19, .sticker-field .s20, .sticker-field .s21, .sticker-field .s22, .sticker-field .s23, .sticker-field .s24, .sticker-field .s25, .sticker-field .s26, .sticker-field .s27, .sticker-field .s28, .sticker-field .s29, .sticker-field .s30, .sticker-field .s32, .sticker-field .s35, .sticker-field .s41, .sticker-field .s42, .sticker-field .s43, .sticker-field .s44, .sticker-field .s45, .sticker-field .s46 {
+        display: none;
+    }
+
+    .sticker-field .sticker {
+        --sk-size: var(--w);
+        width: var(--w);
+        height: var(--w);
+        aspect-ratio: 1 / 1;
+        left: var(--x);
+        right: auto;
+    }
+
+    /* top band: the empty strip beside/above the brand. The first
+       sticker starts clear of the brand badge at the left edge. */
+    .sticker-field .s03 {
+        left: max(106px, 14%);
+        top: 42px;
+        --y: auto;
+        --w: 44px;
+    }
+    .sticker-field .s31 {
+        --x: 32%;
+        top: 42px;
+        --y: auto;
+        --w: 44px;
+    }
+    .sticker-field .s33 {
+        --x: 50%;
+        top: 42px;
+        --y: auto;
+        --w: 44px;
+    }
+    .sticker-field .s01 {
+        --x: 67%;
+        top: 42px;
+        --y: auto;
+        --w: 44px;
+    }
+    .sticker-field .s04 {
+        --x: 82%;
+        top: 42px;
+        --y: auto;
+        --w: 44px;
+    }
+    .sticker-field .s02 {
+        --x: 94%;
+        top: 42px;
+        --y: auto;
+        --w: 44px;
+    }
+
+    /* bottom band: the gap between the chips and the footer */
+    .sticker-field .s39 {
+        --x: 12%;
+        top: auto;
+        bottom: 200px;
+        --y: auto;
+        --w: 44px;
+    }
+    .sticker-field .s40 {
+        --x: 29%;
+        top: auto;
+        bottom: 200px;
+        --y: auto;
+        --w: 44px;
+    }
+    .sticker-field .s37 {
+        --x: 47%;
+        top: auto;
+        bottom: 200px;
+        --y: auto;
+        --w: 44px;
+    }
+    .sticker-field .s36 {
+        --x: 64%;
+        top: auto;
+        bottom: 200px;
+        --y: auto;
+        --w: 44px;
+    }
+    .sticker-field .s34 {
+        --x: 80%;
+        top: auto;
+        bottom: 200px;
+        --y: auto;
+        --w: 44px;
+    }
+    .sticker-field .s38 {
+        --x: 92%;
+        top: auto;
+        bottom: 200px;
+        --y: auto;
+        --w: 44px;
+    }
+}
+
+@media (max-width: 720px) {
+
+    /* the side columns retire: the content column is full width here */
+    .sticker-field .s04, .sticker-field .s05, .sticker-field .s06, .sticker-field .s07, .sticker-field .s08, .sticker-field .s09, .sticker-field .s10, .sticker-field .s11, .sticker-field .s12, .sticker-field .s13, .sticker-field .s14, .sticker-field .s15, .sticker-field .s16, .sticker-field .s17, .sticker-field .s18, .sticker-field .s19, .sticker-field .s20, .sticker-field .s21, .sticker-field .s22, .sticker-field .s23, .sticker-field .s24, .sticker-field .s25, .sticker-field .s26, .sticker-field .s27, .sticker-field .s28, .sticker-field .s29, .sticker-field .s30, .sticker-field .s32, .sticker-field .s33, .sticker-field .s35, .sticker-field .s38, .sticker-field .s40, .sticker-field .s41, .sticker-field .s42, .sticker-field .s43, .sticker-field .s44, .sticker-field .s45, .sticker-field .s46 {
+        display: none;
+    }
+
+    .sticker-field .sticker {
+        --sk-size: var(--w);
+        width: var(--w);
+        height: var(--w);
+        aspect-ratio: 1 / 1;
+        left: var(--x);
+        right: auto;
+    }
+
+    /* top band: the empty strip beside/above the brand. The first
+       sticker starts clear of the brand badge at the left edge. */
+    .sticker-field .s03 {
+        left: max(96px, 16%);
+        top: 42px;
+        --y: auto;
+        --w: 38px;
+    }
+    .sticker-field .s31 {
+        --x: 40%;
+        top: 42px;
+        --y: auto;
+        --w: 38px;
+    }
+    .sticker-field .s01 {
+        --x: 64%;
+        top: 42px;
+        --y: auto;
+        --w: 38px;
+    }
+    .sticker-field .s02 {
+        --x: 88%;
+        top: 42px;
+        --y: auto;
+        --w: 38px;
+    }
+
+    /* bottom band: the gap between the chips and the footer */
+    .sticker-field .s39 {
+        --x: 14%;
+        top: auto;
+        bottom: 194px;
+        --y: auto;
+        --w: 38px;
+    }
+    .sticker-field .s37 {
+        --x: 40%;
+        top: auto;
+        bottom: 194px;
+        --y: auto;
+        --w: 38px;
+    }
+    .sticker-field .s36 {
+        --x: 64%;
+        top: auto;
+        bottom: 194px;
+        --y: auto;
+        --w: 38px;
+    }
+    .sticker-field .s34 {
+        --x: 88%;
+        top: auto;
+        bottom: 194px;
+        --y: auto;
+        --w: 38px;
+    }
+}
+
+@media (max-width: 420px) {
+
+    /* the side columns retire: the content column is full width here */
+    .sticker-field .s02, .sticker-field .s04, .sticker-field .s05, .sticker-field .s06, .sticker-field .s07, .sticker-field .s08, .sticker-field .s09, .sticker-field .s10, .sticker-field .s11, .sticker-field .s12, .sticker-field .s13, .sticker-field .s14, .sticker-field .s15, .sticker-field .s16, .sticker-field .s17, .sticker-field .s18, .sticker-field .s19, .sticker-field .s20, .sticker-field .s21, .sticker-field .s22, .sticker-field .s23, .sticker-field .s24, .sticker-field .s25, .sticker-field .s26, .sticker-field .s27, .sticker-field .s28, .sticker-field .s29, .sticker-field .s30, .sticker-field .s32, .sticker-field .s33, .sticker-field .s35, .sticker-field .s36, .sticker-field .s38, .sticker-field .s40, .sticker-field .s41, .sticker-field .s42, .sticker-field .s43, .sticker-field .s44, .sticker-field .s45, .sticker-field .s46 {
+        display: none;
+    }
+
+    .sticker-field .sticker {
+        --sk-size: var(--w);
+        width: var(--w);
+        height: var(--w);
+        aspect-ratio: 1 / 1;
+        left: var(--x);
+        right: auto;
+    }
+
+    /* top band: the empty strip beside/above the brand. The first
+       sticker starts clear of the brand badge at the left edge. */
+    .sticker-field .s03 {
+        left: max(92px, 18%);
+        top: 42px;
+        --y: auto;
+        --w: 34px;
+    }
+    .sticker-field .s31 {
+        --x: 52%;
+        top: 42px;
+        --y: auto;
+        --w: 34px;
+    }
+    .sticker-field .s01 {
+        --x: 86%;
+        top: 42px;
+        --y: auto;
+        --w: 34px;
+    }
+
+    /* bottom band: the gap between the chips and the footer */
+    .sticker-field .s39 {
+        --x: 18%;
+        top: auto;
+        bottom: 188px;
+        --y: auto;
+        --w: 34px;
+    }
+    .sticker-field .s37 {
+        --x: 52%;
+        top: auto;
+        bottom: 188px;
+        --y: auto;
+        --w: 34px;
+    }
+    .sticker-field .s34 {
+        --x: 86%;
+        top: auto;
+        bottom: 188px;
+        --y: auto;
+        --w: 34px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sticker-field .sticker {
+        animation: none !important;
+        transform: translate(-50%, -50%) rotate(var(--rot, 0deg)) !important;
+    }
+}

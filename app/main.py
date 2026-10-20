@@ -23,6 +23,9 @@ app = FastAPI(
 logger = setup_logger("main")
 workflow_service = WorkflowService()
 
+ROOT_DIR = Path(__file__).parent.parent
+ASSETS_DIR = ROOT_DIR / "assets"
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -85,14 +88,37 @@ async def general_exception_handler(request: Request, exc: Exception):
 
 @app.get("/")
 async def root():
-    root_dir = Path(__file__).parent.parent
-    return FileResponse(str(root_dir / "index.html"), media_type="text/html")
+    return FileResponse(str(ROOT_DIR / "index.html"), media_type="text/html")
 
 
 @app.get("/app.js")
 async def serve_app_js():
-    root_dir = Path(__file__).parent.parent
-    return FileResponse(str(root_dir / "app.js"), media_type="application/javascript")
+    return FileResponse(str(ROOT_DIR / "app.js"), media_type="application/javascript")
+
+
+# Static assets (stickers, icons, og image, favicons)
+app.mount("/assets", StaticFiles(directory=str(ASSETS_DIR), check_dir=False), name="assets")
+
+
+# Crawl directives - served as plain text / xml, not the SPA shell
+@app.get("/robots.txt")
+async def serve_robots():
+    return FileResponse(str(ROOT_DIR / "robots.txt"), media_type="text/plain")
+
+
+@app.get("/sitemap.xml")
+async def serve_sitemap():
+    return FileResponse(str(ROOT_DIR / "sitemap.xml"), media_type="application/xml")
+
+
+@app.get("/favicon.ico")
+async def serve_favicon():
+    return FileResponse(str(ROOT_DIR / "favicon.ico"), media_type="image/x-icon")
+
+
+@app.get("/favicon.svg")
+async def serve_favicon_svg():
+    return FileResponse(str(ASSETS_DIR / "favicon.svg"), media_type="image/svg+xml")
 
 
 app.include_router(workflow_router)

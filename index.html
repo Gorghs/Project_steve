@@ -2,329 +2,823 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Steve — Agentic Builder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+    <title>Project Steve — Agentic n8n Workflow Builder</title>
+    <meta name="description" content="Project Steve turns a plain-language requirement into a hardened n8n workflow JSON through a Build, QA and Security pipeline.">
+    <meta name="author" content="Karthick">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta name="color-scheme" content="light">
+    <meta name="theme-color" content="#f2f9ff">
+    <link rel="canonical" href="https://project-steve-phi.vercel.app/">
+
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="48x48 32x32 16x16">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Project Steve">
+    <meta property="og:title" content="Project Steve — Agentic n8n Workflow Builder">
+    <meta property="og:description" content="Turn a plain-language requirement into a hardened n8n workflow JSON through a Build, QA and Security pipeline. Copy or download it.">
+    <meta property="og:url" content="https://project-steve-phi.vercel.app/">
+    <meta property="og:image" content="https://project-steve-phi.vercel.app/assets/og-image.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Project Steve — Build → QA → Security pipeline that turns a requirement into an n8n workflow JSON">
+    <meta property="og:locale" content="en_US">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Project Steve — Agentic n8n Workflow Builder">
+    <meta name="twitter:description" content="Turn a plain-language requirement into a hardened n8n workflow JSON through a Build, QA and Security pipeline. Copy or download it.">
+    <meta name="twitter:image" content="https://project-steve-phi.vercel.app/assets/og-image.png">
+    <meta name="twitter:image:alt" content="Project Steve — Build → QA → Security pipeline that turns a requirement into an n8n workflow JSON">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://project-steve-phi.vercel.app/#website",
+          "url": "https://project-steve-phi.vercel.app/",
+          "name": "Project Steve",
+          "description": "Turn a plain-language requirement into a hardened n8n workflow JSON.",
+          "inLanguage": "en"
+        },
+        {
+          "@type": "Person",
+          "@id": "https://karthickv.dev/#person",
+          "name": "Karthick",
+          "url": "https://karthickv.dev/"
+        },
+        {
+          "@type": "WebPage",
+          "@id": "https://project-steve-phi.vercel.app/#webpage",
+          "url": "https://project-steve-phi.vercel.app/",
+          "name": "Project Steve — Agentic n8n Workflow Builder",
+          "description": "Project Steve turns a plain-language requirement into a hardened n8n workflow JSON through a Build, QA and Security pipeline.",
+          "inLanguage": "en",
+          "isPartOf": { "@id": "https://project-steve-phi.vercel.app/#website" },
+          "about": { "@id": "https://project-steve-phi.vercel.app/#app" }
+        },
+        {
+          "@type": "SoftwareApplication",
+          "@id": "https://project-steve-phi.vercel.app/#app",
+          "name": "Project Steve",
+          "description": "Agentic builder that turns a plain-language requirement into a hardened n8n workflow JSON through a Build, QA and Security pipeline.",
+          "url": "https://project-steve-phi.vercel.app/",
+          "applicationCategory": "DeveloperApplication",
+          "operatingSystem": "Any",
+          "browserRequirements": "Requires JavaScript.",
+          "softwareVersion": "1.0.0",
+          "image": "https://project-steve-phi.vercel.app/assets/og-image.png",
+          "featureList": [
+            "Three-phase Build, QA and Security workflow pipeline",
+            "Generates hardened n8n workflow JSON from a text requirement",
+            "Copy or download the generated workflow JSON"
+          ],
+          "inLanguage": "en",
+          "isPartOf": { "@id": "https://project-steve-phi.vercel.app/#website" },
+          "author": { "@id": "https://karthickv.dev/#person" },
+          "publisher": { "@id": "https://karthickv.dev/#person" }
+        }
+      ]
+    }
+    </script>
+
     <style>
         :root {
-            --bg: #050505;
-            --grid: rgba(255,255,255,0.07);
-            --panel: #0c0c0c;
-            --edge: #1c1c1c;
-            --text: #f5f5f5;
-            --muted: #b5b5b5;
-            --accent: #ffffff;
-            --success: #9cf3c5;
+            --bg: #f2f9ff;
+            --bg-warm: #f7fbff;
+            --surface: #ffffff;
+            --surface-soft: #eef6ff;
+            --line: #e2edf9;
+            --line-strong: #cddff3;
+            --ink: #101a2c;
+            --ink-soft: #4a5b73;
+            --ink-faint: #6b7a92;
+            --violet: #0284c7;
+            --violet-deep: #075985;
+            --sky: #38bdf8;
+            --mint-deep: #0f766e;
+            /* the centred content column.
+               It is exactly as wide as the --sk-col column the sticker rails
+               are clamped against in assets/stickers.css, so a rail sticker
+               can never slide over the headline, the quote or the composer. */
+            --colw: 100%;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
+        html { -webkit-text-size-adjust: 100%; overflow: hidden; }
+
         body {
-            font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+            font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
             background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
+            color: var(--ink);
+            min-height: 100dvh;
+            min-height: 100vh; /* fallback */
             overflow: hidden;
             position: relative;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            flex-direction: column;
         }
 
-        .grid-bg {
+        .page {
+            position: relative;
+            isolation: isolate;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        /* ---------- pastel backdrop ---------- */
+
+        @media (min-width: 1100px) {
+            /* the content column shrinks with the viewport so the two sticker
+               rails always have a gutter to live in (never over the text) */
+            :root { --colw: min(1160px, calc(100vw - 300px)); }
+        }
+
+        .backdrop {
             position: fixed;
             inset: 0;
-            background-image:
-                linear-gradient(var(--grid) 1px, transparent 1px),
-                linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-            background-size: 80px 80px;
-            opacity: 0.45;
+            z-index: 0;
             pointer-events: none;
-            animation: slide 28s linear infinite;
+            overflow: hidden;
+            background:
+                radial-gradient(60rem 60rem at 78% 8%, rgba(186, 230, 253, .50), transparent 62%),
+                radial-gradient(60rem 60rem at 12% 88%, rgba(165, 214, 245, .45), transparent 60%),
+                linear-gradient(180deg, var(--bg) 0%, var(--bg-warm) 55%, var(--bg) 100%);
         }
 
-        @keyframes slide {
-            from { transform: translateY(0); }
-            to { transform: translateY(-80px); }
+        .backdrop::before {
+            content: "";
+            position: absolute;
+            inset: -18%;
+            background:
+                radial-gradient(26rem 26rem at 18% 16%, rgba(56, 189, 248, .38), transparent 62%),
+                radial-gradient(24rem 24rem at 84% 24%, rgba(14, 165, 233, .32), transparent 62%),
+                radial-gradient(22rem 22rem at 72% 78%, rgba(56, 189, 248, .26), transparent 60%),
+                radial-gradient(20rem 20rem at 16% 72%, rgba(34, 211, 238, .24), transparent 60%);
+            filter: blur(14px);
+            animation: drift 34s ease-in-out infinite alternate;
+        }
+
+        .backdrop::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(rgba(2, 132, 199, .10) 1px, transparent 1px);
+            background-size: 26px 26px;
+            -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 32%, #000 12%, transparent 76%);
+            mask-image: radial-gradient(ellipse 80% 70% at 50% 32%, #000 12%, transparent 76%);
+        }
+
+        @keyframes drift {
+            from { transform: translate3d(-1.5%, -1%, 0) scale(1); }
+            to { transform: translate3d(1.5%, 1.5%, 0) scale(1.04); }
+        }
+
+        /* ---------- sticker field container ----------
+           Per-sticker position, size and float animation live in the external
+           sticker stylesheet - this block only anchors the layer. */
+
+        .sticker-field {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            overflow: hidden;
         }
 
         header {
             position: relative;
-            z-index: 2;
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 26px 24px 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            z-index: 3;
+            width: 100%;
+            padding: 12px 20px 4px;
+            flex-shrink: 0;
         }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 800;
-            letter-spacing: 0.14em;
-        }
+        /* brand logo removed - space freed for decorative background */
 
-        .brand-badge {
-            width: 46px;
-            height: 46px;
-            border-radius: 10px;
-            border: 1px solid var(--edge);
-            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.25), transparent 50%),
-                        var(--panel);
-            display: grid;
-            place-items: center;
-            font-size: 16px;
-            color: var(--text);
-            box-shadow: 0 0 0 1px var(--edge), 0 10px 40px rgba(0,0,0,0.45);
-        }
-
-        .pill {
-            padding: 6px 10px;
-            border-radius: 999px;
-            border: 1px solid var(--edge);
-            color: var(--muted);
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-        }
+        /* ---------- main / hero ---------- */
 
         main {
             position: relative;
-            z-index: 2;
-            max-width: 1100px;
+            z-index: 3;
+            width: 100%;
+            max-width: 1460px;
             margin: 0 auto;
-            padding: 0 24px 48px;
+            padding: 0 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 0;
+            overflow: hidden;
         }
 
-        .shell {
-            background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0)) padding-box,
-                        var(--panel);
-            border: 1px solid var(--edge);
-            border-radius: 18px;
-            padding: 28px;
-            box-shadow: 0 30px 90px rgba(0,0,0,0.6);
-        }
-
-        .grid-layout {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-            gap: 26px;
-            align-items: start;
+        /* the hero never grows past the sticker column */
+        .hero {
+            width: 100%;
+            max-width: var(--colw);
+            margin: 0 auto;
+            text-align: center;
+            flex-shrink: 0;
         }
 
         h1 {
-            font-size: 38px;
-            letter-spacing: 0.08em;
-            line-height: 1.2;
-            margin-bottom: 14px;
-        }
-
-        .lede {
-            color: var(--muted);
-            line-height: 1.7;
-            margin-bottom: 20px;
-            max-width: 540px;
-        }
-
-        .tags {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 10px;
-        }
-
-        .tag {
-            padding: 10px 12px;
-            border: 1px solid var(--edge);
-            border-radius: 10px;
-            background: #0f0f0f;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            font-size: 11px;
-            color: var(--text);
-        }
-
-        .panel {
-            background: #0a0a0a;
-            border: 1px solid var(--edge);
-            border-radius: 14px;
-            padding: 18px;
-        }
-
-        label {
-            display: block;
-            color: var(--muted);
-            font-size: 12px;
-            letter-spacing: 0.06em;
-            margin-bottom: 8px;
-        }
-
-        textarea {
-            width: 100%;
-            min-height: 170px;
-            background: #050505;
-            border: 1px solid var(--edge);
-            border-radius: 12px;
-            color: var(--text);
-            padding: 14px;
-            font-size: 14px;
-            font-family: "SFMono-Regular", Consolas, Menlo, monospace;
-            resize: vertical;
-            transition: border 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        textarea:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 1px rgba(255,255,255,0.35);
-        }
-
-        .controls {
-            margin-top: 14px;
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 14px 18px;
-            border-radius: 12px;
-            border: 1px solid var(--edge);
-            cursor: pointer;
+            font-size: clamp(36px, 5.5vw, 64px);
+            line-height: 1.05;
+            letter-spacing: -0.03em;
             font-weight: 800;
-            letter-spacing: 0.08em;
-            background: #fff;
-            color: #000;
-            transition: transform 0.1s ease, box-shadow 0.2s ease;
+            color: var(--ink);
+            margin-bottom: 6px;
         }
 
-        .btn:hover { transform: translateY(-1px); }
-        .btn:active { transform: translateY(0); }
-        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        h1 .accent {
+            background: linear-gradient(120deg, #075985 0%, #0284c7 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .quote {
+            font-size: clamp(18px, 2.4vw, 28px);
+            line-height: 1.3;
+            color: #45566d;
+            font-weight: 500;
+            margin-top: 6px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.25em;
+            align-items: baseline;
+        }
+
+        .quote-static {
+            color: var(--ink);
+            font-weight: 600;
+        }
+
+        .quote-animated {
+            position: relative;
+            min-width: 0;
+            color: var(--violet);
+        }
+
+        /* Typography variations for animated text */
+        .quote-animated.style-1 { font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif; font-weight: 500; letter-spacing: 0; }
+        .quote-animated.style-2 { font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif; font-weight: 700; letter-spacing: 0; }
+        .quote-animated.style-3 { font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif; font-weight: 500; font-style: italic; letter-spacing: 0; }
+        .quote-animated.style-4 { font-family: "SFMono-Regular", "Fira Code", "Fira Mono", Consolas, Menlo, monospace; font-weight: 500; letter-spacing: 0; }
+        .quote-animated.style-5 { font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif; font-weight: 500; letter-spacing: 0.08em; }
+
+        .quote-animated::after {
+            content: "";
+            display: inline-block;
+            width: 2px;
+            height: 1.1em;
+            margin-left: 3px;
+            vertical-align: -0.1em;
+            background: var(--violet);
+            animation: cursor-blink 1s steps(2) infinite;
+        }
+
+        @keyframes cursor-blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .quote-animated::after {
+                animation: none;
+                opacity: 0;
+            }
+        }
+
+        /* ---------- the one wide composer rectangle ---------- */
+
+        .composer {
+            display: flex;
+            gap: 10px;
+            align-items: stretch;
+            width: 100%;
+            max-width: var(--colw);
+            margin: 20px auto 0;
+            background: #fff;
+            border: 1px solid #e2edf9;
+            border-radius: 24px;
+            padding: 10px;
+            box-shadow: 0 24px 60px -30px rgba(2, 132, 199, .28), 0 2px 6px rgba(27, 21, 51, .04);
+            text-align: left;
+            flex-shrink: 0;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0 0 0 0);
+            clip-path: inset(50%);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        #requirements {
+            flex: 1;
+            min-width: 0;
+            min-height: 60px;
+            max-height: 160px;
+            resize: vertical;
+            background: transparent;
+            border: 0;
+            border-radius: 14px;
+            padding: 10px 12px;
+            color: var(--ink);
+            font-size: 15px;
+            line-height: 1.5;
+            font-family: inherit;
+        }
+
+        #requirements::placeholder { color: #5b7a99; }
+
+        #requirements:focus-visible {
+            outline: 3px solid #0284c7;
+            outline-offset: 2px;
+            background: #f7fbff;
+        }
+
+        .composer-actions {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 0;
+        }
+
+        .btn-send {
+            width: 44px;
+            height: 44px;
+            border: 0;
+            border-radius: 14px;
+            cursor: pointer;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, #075985 0%, #0369a1 100%);
+            box-shadow: 0 12px 24px -12px rgba(2, 132, 199, .85);
+            transition: transform 0.12s ease, box-shadow 0.2s ease, filter 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .btn-send:hover { transform: translateY(-1px); box-shadow: 0 16px 28px -14px rgba(2, 132, 199, .95); }
+        .btn-send:active { transform: translateY(0) scale(0.98); }
+        .btn-send:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+        .btn-send:focus-visible { outline: 3px solid #0284c7; outline-offset: 2px; }
+
+        .btn-send svg { width: 20px; height: 20px; stroke: #fff; }
+
+        .status:empty { height: 0; opacity: 0; overflow: hidden; }
+
 
         .status {
-            color: var(--muted);
+            color: #45566d;
             font-size: 12px;
-            letter-spacing: 0.06em;
+            letter-spacing: 0.02em;
+            margin-left: 8px;
+            white-space: nowrap;
         }
 
-        .status strong { color: var(--success); }
+        .status:not(:empty) { margin-top: 0; }
+
+        .status strong { color: #0f766e; }
+
+        /* ---------- example prompt chips ---------- */
+
+        .examples {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 14px;
+            flex-shrink: 0;
+        }
+        .example-chip[aria-pressed="true"],
+        .example-chip.is-active {
+            background: #0369a1;
+            border-color: #0369a1;
+            color: #fff;
+        }
+
+        .example-chip[aria-pressed="true"]:hover,
+        .example-chip.is-active:hover {
+            background: #075985;
+            border-color: #075985;
+            color: #fff;
+        }
+
+
+        .example-chip {
+            background: #eef6ff;
+            border: 1px solid #a9d8f7;
+            color: #075985;
+            border-radius: 999px;
+            padding: 7px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: inherit;
+            line-height: 1.2;
+            cursor: pointer;
+            transition: background 0.18s ease, border-color 0.18s ease, transform 0.12s ease;
+        }
+
+        .example-chip:hover { background: #d5ecfd; border-color: #a9d8f7; }
+        .example-chip:active { transform: translateY(1px); }
+
+        /* ---------- result panel ---------- */
 
         .result-panel {
             margin-top: 16px;
-            background: #050505;
-            border: 1px solid var(--edge);
-            border-radius: 12px;
+            background: #fff;
+            border: 1px solid #e2edf9;
+            border-radius: 16px;
             padding: 12px;
+            text-align: left;
+            flex-shrink: 0;
+            max-height: 200px;
+            overflow: hidden;
         }
 
         .result-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            color: var(--muted);
+            color: #4a5b73;
             margin-bottom: 8px;
-            font-size: 12px;
-            letter-spacing: 0.08em;
+            font-size: 10.5px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
         }
 
-        .result-actions { display: flex; gap: 10px; }
+        .result-actions { display: flex; gap: 8px; }
 
         .copy-btn {
-            background: #0f0f0f;
-            border: 1px solid var(--edge);
-            color: var(--text);
-            padding: 10px 14px;
+            background: #eef6ff;
+            border: 1px solid #cfe8fb;
+            color: #075985;
+            padding: 7px 14px;
             border-radius: 10px;
             cursor: pointer;
             font-weight: 700;
-            letter-spacing: 0.06em;
+            font-size: 12px;
+            letter-spacing: 0.02em;
+            font-family: inherit;
+            transition: background 0.2s ease, border-color 0.2s ease;
         }
 
-        .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+        .copy-btn:hover { background: #d5ecfd; border-color: #a9d8f7; }
 
         .json-output {
             width: 100%;
-            min-height: 220px;
-            background: #030303;
-            color: #e8ffe5;
-            border: 1px solid var(--edge);
-            border-radius: 10px;
-            padding: 12px;
+            min-height: 140px;
+            max-height: 140px;
+            background: #f7fbff;
+            color: #2f2a45;
+            border: 1px solid #e2edf9;
+            border-radius: 12px;
+            padding: 10px;
             font-family: "SFMono-Regular", Consolas, Menlo, monospace;
-            font-size: 13px;
-            resize: vertical;
+            font-size: 12px;
+            resize: none;
+            overflow: auto;
         }
 
         .hidden { display: none; }
 
+        /* ---------- footer ---------- */
+
         footer {
             position: relative;
-            z-index: 2;
-            max-width: 1100px;
-            margin: 28px auto 18px;
-            padding: 0 24px;
-            color: var(--muted);
+            z-index: 3;
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 6px 20px 16px;
+            color: #4a5b73;
             text-align: center;
-            font-size: 12px;
+            font-size: 11.5px;
             letter-spacing: 0.08em;
+            flex-shrink: 0;
         }
 
-        @media (max-width: 720px) {
-            body { overflow: auto; }
-            h1 { font-size: 30px; }
-            .btn { width: 100%; text-align: center; }
+        footer > div { display: inline-block; }
+
+        .social-list {
+            list-style: none;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 12px 0 8px;
+            padding: 0;
+        }
+
+        .social-list a {
+            display: grid;
+            place-items: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: #fff;
+            border: 1px solid #e2edf9;
+            box-shadow: 0 10px 20px -16px rgba(2, 132, 199, .6);
+            transition: transform 0.16s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .social-list a:hover {
+            transform: translateY(-2px);
+            border-color: #cfe8fb;
+            box-shadow: 0 14px 24px -16px rgba(2, 132, 199, .75);
+        }
+
+        .social-list img {
+            width: 18px;
+            height: 18px;
+            display: block;
+        }
+
+        /* Footer credit removed - Icons8 attribution removed per requirement */
+
+        /* ---------- focus + motion ---------- */
+
+        :focus-visible {
+            outline: 3px solid #0284c7;
+            outline-offset: 3px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.001ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.001ms !important;
+                scroll-behavior: auto !important;
+            }
+
+            .backdrop::before { animation: none !important; }
+
+            .btn-send:hover,
+            .social-list a:hover { transform: none; }
+        }
+
+        /* ---------- responsive ---------- */
+
+        @media (max-width: 860px) {
+            .composer {
+                flex-direction: column;
+                gap: 10px;
+                border-radius: 22px;
+            }
+
+            .composer-actions { align-items: stretch; justify-content: center; }
+            .btn-send { width: 100%; }
+            #requirements { min-height: 80px; }
+        }
+
+        @media (max-width: 719px) {
+            header { padding: 10px 16px 4px; }
+            main { padding: 0 16px; }
+            h1 { font-size: clamp(30px, 8vw, 42px); }
+            .quote { font-size: clamp(16px, 4.8vw, 22px); }
+            .composer { margin-top: 16px; padding: 10px; }
+            .examples { gap: 6px; }
+            .example-chip { padding: 6px 12px; font-size: 11.5px; }
+            footer { padding: 4px 16px 12px; font-size: 11px; }
+            .social-list { gap: 8px; margin: 8px 0 6px; }
+            .social-list a { width: 36px; height: 36px; }
+            .social-list img { width: 16px; height: 16px; }
         }
     </style>
-</head>
+    <link rel="stylesheet" href="/assets/stickers.css">
+
 <body>
-    <div class="grid-bg"></div>
-    <header>
-        <div class="brand">
-            <div class="brand-badge">PS</div>
-            <div>
-                <div>PROJECT STEVE</div>
-                <div class="pill">AGENTIC BUILDER</div>
-            </div>
-        </div>
-    </header>
+    <div class="page">
+        <div class="backdrop" aria-hidden="true"></div>
 
-    <main>
-        <div class="shell">
-            <div class="grid-layout">
-                <div>
-                    <h1>Precision automation, one prompt.</h1>
-                    <p class="lede">Paste a requirement, let the Build → QA → Security triad forge a hardened n8n workflow, and auto-download the JSON. Minimal surface, maximum signal.</p>
-                    <div class="tags">
-                        <span class="tag">CSP locked</span>
-                        <span class="tag">Serverless API</span>
-                        <span class="tag">Instant JSON</span>
-                        <span class="tag">No clutter</span>
-                    </div>
-                </div>
-                <div class="panel">
-                    <label for="requirements">Prompt / Requirement</label>
+        <div class="sticker-field" aria-hidden="true">
+            <span class="sticker s01">
+                <img class="sticker-img" src="/assets/stickers/robot.webp" alt="" width="88" height="88" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s02">
+                <img class="sticker-img" src="/assets/stickers/robot-2.webp" alt="" width="76" height="76" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s03">
+                <img class="sticker-img" src="/assets/stickers/rocket.webp" alt="" width="80" height="80" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s04">
+                <img class="sticker-img" src="/assets/stickers/gear.webp" alt="" width="48" height="48" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s05">
+                <img class="sticker-img" src="/assets/stickers/lightning-bolt.webp" alt="" width="46" height="46" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s06">
+                <img class="sticker-img" src="/assets/stickers/shield.webp" alt="" width="66" height="66" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s07">
+                <img class="sticker-img" src="/assets/stickers/checkmark.webp" alt="" width="60" height="60" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s08">
+                <img class="sticker-img" src="/assets/stickers/puzzle.webp" alt="" width="44" height="44" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s09">
+                <img class="sticker-img" src="/assets/stickers/brain.webp" alt="" width="84" height="84" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s10">
+                <img class="sticker-img" src="/assets/stickers/chart.webp" alt="" width="58" height="58" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s11">
+                <img class="sticker-img" src="/assets/stickers/line-chart.webp" alt="" width="76" height="76" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s12">
+                <img class="sticker-img" src="/assets/stickers/cloud.webp" alt="" width="54" height="54" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s13">
+                <img class="sticker-img" src="/assets/stickers/database.webp" alt="" width="46" height="46" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s14">
+                <img class="sticker-img" src="/assets/stickers/lock.webp" alt="" width="44" height="44" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s15">
+                <img class="sticker-img" src="/assets/stickers/idea.webp" alt="" width="84" height="84" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s16">
+                <img class="sticker-img" src="/assets/stickers/sparkles.webp" alt="" width="66" height="66" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s17">
+                <img class="sticker-img" src="/assets/stickers/trophy.webp" alt="" width="50" height="50" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s18">
+                <img class="sticker-img" src="/assets/stickers/workflow.webp" alt="" width="50" height="50" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s19">
+                <img class="sticker-img" src="/assets/stickers/code.webp" alt="" width="64" height="64" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s20">
+                <img class="sticker-img" src="/assets/stickers/plug.webp" alt="" width="78" height="78" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s21">
+                <img class="sticker-img" src="/assets/stickers/bot.webp" alt="" width="54" height="54" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s22">
+                <img class="sticker-img" src="/assets/stickers/server.webp" alt="" width="70" height="70" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s23">
+                <img class="sticker-img" src="/assets/stickers/api.webp" alt="" width="46" height="46" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s24">
+                <img class="sticker-img" src="/assets/stickers/chip.webp" alt="" width="44" height="44" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s25">
+                <img class="sticker-img" src="/assets/stickers/cursor.webp" alt="" width="56" height="56" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s26">
+                <img class="sticker-img" src="/assets/stickers/calculator.webp" alt="" width="58" height="58" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s27">
+                <img class="sticker-img" src="/assets/stickers/clock.webp" alt="" width="70" height="70" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s28">
+                <img class="sticker-img" src="/assets/stickers/hourglass.webp" alt="" width="78" height="78" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s29">
+                <img class="sticker-img" src="/assets/stickers/key.webp" alt="" width="48" height="48" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s30">
+                <img class="sticker-img" src="/assets/stickers/star.webp" alt="" width="46" height="46" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s31">
+                <img class="sticker-img" src="/assets/stickers/medal.webp" alt="" width="54" height="54" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s32">
+                <img class="sticker-img" src="/assets/stickers/crown.webp" alt="" width="64" height="64" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s33">
+                <img class="sticker-img" src="/assets/stickers/compass.webp" alt="" width="64" height="64" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s34">
+                <img class="sticker-img" src="/assets/stickers/book.webp" alt="" width="72" height="72" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s35">
+                <img class="sticker-img" src="/assets/stickers/microscope.webp" alt="" width="44" height="44" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s36">
+                <img class="sticker-img" src="/assets/stickers/test-tube.webp" alt="" width="48" height="48" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s37">
+                <img class="sticker-img" src="/assets/stickers/firewall.webp" alt="" width="66" height="66" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s38">
+                <img class="sticker-img" src="/assets/stickers/bug.webp" alt="" width="58" height="58" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s39">
+                <img class="sticker-img" src="/assets/stickers/layers.webp" alt="" width="62" height="62" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s40">
+                <img class="sticker-img" src="/assets/stickers/satellite.webp" alt="" width="52" height="52" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <!-- Additional stickers to fill empty areas -->
+            <span class="sticker s41">
+                <img class="sticker-img" src="/assets/stickers/gear.webp" alt="" width="40" height="40" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s42">
+                <img class="sticker-img" src="/assets/stickers/code.webp" alt="" width="38" height="38" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s43">
+                <img class="sticker-img" src="/assets/stickers/database.webp" alt="" width="36" height="36" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s44">
+                <img class="sticker-img" src="/assets/stickers/robot.webp" alt="" width="42" height="42" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s45">
+                <img class="sticker-img" src="/assets/stickers/plug.webp" alt="" width="38" height="38" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s46">
+                <img class="sticker-img" src="/assets/stickers/lightning-bolt.webp" alt="" width="36" height="36" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+        </div>
+
+        <header>
+        </header>
+
+        <main>
+            <div class="hero">
+                <h1>Project <span class="accent">Steve</span></h1>
+                <p class="quote">
+                    <span class="quote-static">Turn your ideas into</span>
+                    <span class="quote-animated" aria-live="polite" aria-atomic="true"></span>
+                </p>
+
+                <div class="composer">
+                    <label class="sr-only" for="requirements">Prompt / Requirement</label>
                     <textarea id="requirements" placeholder="Example: Listen to Stripe webhooks, store successes in Postgres, send Gmail confirmations, log errors to Slack."></textarea>
-                    <div class="controls">
-                        <button class="btn" id="generate-btn">Generate & Download JSON</button>
-                        <span class="status" id="status-text">Ready.</span>
-                    </div>
-                    <div class="result-panel hidden" id="result-panel">
-                        <div class="result-header">
-                            <span>Workflow JSON</span>
-                            <div class="result-actions">
-                                <button class="copy-btn" id="copy-json-btn">Copy</button>
-                            </div>
-                        </div>
-                        <textarea id="workflow-json" class="json-output" readonly></textarea>
+                    <div class="composer-actions">
+                        <button class="btn-send" id="generate-btn" aria-label="Send prompt" title="Send prompt">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                        </button>
+                        <span class="status" id="status-text" role="status" aria-live="polite"></span>
                     </div>
                 </div>
-            </div>
-        </div>
-    </main>
 
-    <footer>
-        PROJECT STEVE · BUILT WITH PURPOSE
-    </footer>
+                <div class="examples" role="group" aria-label="Example prompts">
+                    <button type="button" class="example-chip" data-prompt="Sync Stripe payments to Postgres">Sync Stripe payments to Postgres</button>
+                    <button type="button" class="example-chip" data-prompt="Email me a daily sales digest">Email me a daily sales digest</button>
+                    <button type="button" class="example-chip" data-prompt="Log API errors to Slack">Log API errors to Slack</button>
+                </div>
+
+                <div class="result-panel hidden" id="result-panel">
+                    <div class="result-header">
+                        <span>Workflow JSON</span>
+                        <div class="result-actions">
+                            <button class="copy-btn" id="copy-json-btn">Copy</button>
+                        </div>
+                    </div>
+                    <textarea id="workflow-json" class="json-output" readonly aria-label="Generated workflow JSON"></textarea>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <div>PROJECT STEVE · BUILT WITH PURPOSE</div>
+            <ul class="social-list">
+                <li>
+                    <a href="https://karthickv.dev/" target="_blank" rel="noopener noreferrer" aria-label="Karthick's portfolio">
+                        <img src="/assets/icons/portfolio.svg" alt="" width="20" height="20" loading="lazy" decoding="async">
+                    </a>
+                </li>
+                <li>
+                    <a href="https://github.com/Gorghs" target="_blank" rel="noopener noreferrer" aria-label="Karthick on GitHub">
+                        <img src="/assets/icons/github.svg" alt="" width="20" height="20" loading="lazy" decoding="async">
+                    </a>
+                </li>
+                <li>
+                    <a href="https://www.linkedin.com/in/karthickv4/" target="_blank" rel="noopener noreferrer" aria-label="Karthick on LinkedIn">
+                        <img src="/assets/icons/linkedin.svg" alt="" width="20" height="20" loading="lazy" decoding="async">
+                    </a>
+                </li>
+                <li>
+                    <a href="https://leetcode.com/u/gorghs/" target="_blank" rel="noopener noreferrer" aria-label="Karthick on LeetCode">
+                        <img src="/assets/icons/leetcode.svg" alt="" width="20" height="20" loading="lazy" decoding="async">
+                    </a>
+                </li>
+            </ul>
+        </footer>
+    </div>
 
     <script src="/app.js" defer></script>
 </body>

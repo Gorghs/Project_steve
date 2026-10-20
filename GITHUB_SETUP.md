@@ -17,14 +17,14 @@ After creating the repo on GitHub, run these commands:
 ```bash
 cd c:\Users\karthick\Desktop\project\n8n-agentic-builder
 
-git remote add origin https://github.com/gorghs/project-steve.git
+git remote add origin https://github.com/Gorghs/Project_steve.git
 git branch -M main
 git push -u origin main
 ```
 
 ## Step 3: Verify
 
-Visit: `https://github.com/gorghs/project-steve`
+Visit: `https://github.com/Gorghs/Project_steve`
 
 Your code is now on GitHub! ✅
 
