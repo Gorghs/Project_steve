@@ -111,7 +111,7 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        html { -webkit-text-size-adjust: 100%; overflow: hidden; }
+        html { -webkit-text-size-adjust: 100%; overflow-x: hidden; }
 
         body {
             font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
@@ -119,7 +119,7 @@
             color: var(--ink);
             min-height: 100dvh;
             min-height: 100vh; /* fallback */
-            overflow: hidden;
+            overflow-x: hidden;
             position: relative;
             -webkit-font-smoothing: antialiased;
             display: flex;
@@ -132,8 +132,10 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            min-height: 0;
-            overflow: hidden;
+            min-height: 100dvh;
+            overflow-x: hidden;
+            overflow-y: auto;
+            scroll-behavior: smooth;
         }
 
         /* ---------- pastel backdrop ---------- */
@@ -141,7 +143,7 @@
         @media (min-width: 1100px) {
             /* the content column shrinks with the viewport so the two sticker
                rails always have a gutter to live in (never over the text) */
-            :root { --colw: min(1160px, calc(100vw - 300px)); }
+            :root { --colw: min(980px, calc(100vw - 360px)); }
         }
 
         .backdrop {
@@ -214,14 +216,14 @@
             width: 100%;
             max-width: 1460px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 20px 20px 40px;
             flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 0;
-            overflow: hidden;
+            overflow: visible;
         }
 
         /* the hero never grows past the sticker column */
@@ -234,12 +236,12 @@
         }
 
         h1 {
-            font-size: clamp(36px, 5.5vw, 64px);
-            line-height: 1.05;
-            letter-spacing: -0.03em;
-            font-weight: 800;
+            font-size: clamp(48px, 6.5vw, 80px);
+            line-height: 1.08;
+            letter-spacing: -0.035em;
+            font-weight: 850;
             color: var(--ink);
-            margin-bottom: 6px;
+            margin-bottom: 14px;
         }
 
         h1 .accent {
@@ -250,15 +252,16 @@
         }
 
         .quote {
-            font-size: clamp(18px, 2.4vw, 28px);
-            line-height: 1.3;
+            font-size: clamp(22px, 2.8vw, 34px);
+            line-height: 1.35;
             color: #45566d;
             font-weight: 500;
-            margin-top: 6px;
+            margin-top: 0;
+            margin-bottom: 8px;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 0.25em;
+            gap: 0.3em;
             align-items: baseline;
         }
 
@@ -311,7 +314,7 @@
             align-items: stretch;
             width: 100%;
             max-width: var(--colw);
-            margin: 20px auto 0;
+            margin: clamp(30px, 4vh, 44px) auto 0;
             background: #fff;
             border: 1px solid #e2edf9;
             border-radius: 24px;
@@ -446,15 +449,22 @@
         /* ---------- result panel ---------- */
 
         .result-panel {
-            margin-top: 16px;
-            background: #fff;
-            border: 1px solid #e2edf9;
-            border-radius: 16px;
-            padding: 12px;
+            margin-top: 24px;
+            margin-bottom: 30px;
+            background: #ffffff;
+            border: 1px solid #dbeafe;
+            border-radius: 18px;
+            padding: 16px;
             text-align: left;
-            flex-shrink: 0;
-            max-height: 200px;
-            overflow: hidden;
+            width: 100%;
+            box-shadow: 0 24px 60px -25px rgba(2, 132, 199, 0.22), 0 4px 16px rgba(15, 23, 42, 0.05);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: panelFadeIn 0.35s ease-out;
+        }
+
+        @keyframes panelFadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .result-header {
@@ -462,42 +472,119 @@
             justify-content: space-between;
             align-items: center;
             color: #4a5b73;
-            margin-bottom: 8px;
-            font-size: 10.5px;
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #edf4fc;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
-        .result-actions { display: flex; gap: 8px; }
+        .result-header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
 
-        .copy-btn {
+        .result-title {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .view-tabs {
+            display: inline-flex;
+            background: #f1f5f9;
+            border-radius: 10px;
+            padding: 3px;
+            gap: 2px;
+        }
+
+        .view-tab {
+            border: none;
+            background: transparent;
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: 7px;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            display: flex;
+            align-items: center;
+            font-family: inherit;
+        }
+
+        .view-tab.is-active {
+            background: #ffffff;
+            color: #0284c7;
+            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .copy-btn, .download-btn {
             background: #eef6ff;
             border: 1px solid #cfe8fb;
             color: #075985;
             padding: 7px 14px;
             border-radius: 10px;
             cursor: pointer;
-            font-weight: 700;
+            font-weight: 600;
             font-size: 12px;
-            letter-spacing: 0.02em;
+            letter-spacing: 0.01em;
             font-family: inherit;
-            transition: background 0.2s ease, border-color 0.2s ease;
+            transition: all 0.18s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .download-btn {
+            background: #0284c7;
+            border-color: #0284c7;
+            color: #ffffff;
         }
 
         .copy-btn:hover { background: #d5ecfd; border-color: #a9d8f7; }
+        .download-btn:hover { background: #0369a1; border-color: #0369a1; }
+
+        .result-view-panel {
+            width: 100%;
+        }
+
+        .workflow-canvas-container {
+            width: 100%;
+            height: 480px;
+            min-height: 420px;
+            border-radius: 12px;
+            border: 1px solid #e2edf9;
+            position: relative;
+            overflow: hidden;
+            background: #f8fafc;
+        }
 
         .json-output {
             width: 100%;
-            min-height: 140px;
-            max-height: 140px;
-            background: #f7fbff;
-            color: #2f2a45;
-            border: 1px solid #e2edf9;
+            height: 480px;
+            min-height: 420px;
+            background: #0f172a;
+            color: #38bdf8;
+            border: 1px solid #1e293b;
             border-radius: 12px;
-            padding: 10px;
+            padding: 16px;
             font-family: "SFMono-Regular", Consolas, Menlo, monospace;
-            font-size: 12px;
+            font-size: 12.5px;
+            line-height: 1.6;
             resize: none;
             overflow: auto;
         }
@@ -594,9 +681,9 @@
         @media (max-width: 719px) {
             header { padding: 10px 16px 4px; }
             main { padding: 0 16px; }
-            h1 { font-size: clamp(30px, 8vw, 42px); }
-            .quote { font-size: clamp(16px, 4.8vw, 22px); }
-            .composer { margin-top: 16px; padding: 10px; }
+            h1 { font-size: clamp(38px, 9vw, 54px); margin-bottom: 10px; }
+            .quote { font-size: clamp(19px, 5.2vw, 26px); }
+            .composer { margin-top: 24px; padding: 10px; }
             .examples { gap: 6px; }
             .example-chip { padding: 6px 12px; font-size: 11.5px; }
             footer { padding: 4px 16px 12px; font-size: 11px; }
@@ -606,6 +693,7 @@
         }
     </style>
     <link rel="stylesheet" href="/assets/stickers.css">
+    <link rel="stylesheet" href="/assets/workflow-canvas.css">
 
 <body>
     <div class="page">
@@ -613,143 +701,238 @@
 
         <div class="sticker-field" aria-hidden="true">
             <span class="sticker s01">
-                <img class="sticker-img" src="/assets/stickers/robot.webp" alt="" width="88" height="88" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+                <img class="sticker-img" src="/assets/stickers/cursor.webp" alt="" width="48" height="48" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
             </span>
             <span class="sticker s02">
-                <img class="sticker-img" src="/assets/stickers/robot-2.webp" alt="" width="76" height="76" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
-            </span>
-            <span class="sticker s03">
-                <img class="sticker-img" src="/assets/stickers/rocket.webp" alt="" width="80" height="80" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
-            </span>
-            <span class="sticker s04">
-                <img class="sticker-img" src="/assets/stickers/gear.webp" alt="" width="48" height="48" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
-            </span>
-            <span class="sticker s05">
-                <img class="sticker-img" src="/assets/stickers/lightning-bolt.webp" alt="" width="46" height="46" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
-            </span>
-            <span class="sticker s06">
-                <img class="sticker-img" src="/assets/stickers/shield.webp" alt="" width="66" height="66" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
-            </span>
-            <span class="sticker s07">
-                <img class="sticker-img" src="/assets/stickers/checkmark.webp" alt="" width="60" height="60" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
-            </span>
-            <span class="sticker s08">
-                <img class="sticker-img" src="/assets/stickers/puzzle.webp" alt="" width="44" height="44" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
-            </span>
-            <span class="sticker s09">
-                <img class="sticker-img" src="/assets/stickers/brain.webp" alt="" width="84" height="84" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
-            </span>
-            <span class="sticker s10">
-                <img class="sticker-img" src="/assets/stickers/chart.webp" alt="" width="58" height="58" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
-            </span>
-            <span class="sticker s11">
-                <img class="sticker-img" src="/assets/stickers/line-chart.webp" alt="" width="76" height="76" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
-            </span>
-            <span class="sticker s12">
-                <img class="sticker-img" src="/assets/stickers/cloud.webp" alt="" width="54" height="54" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
-            </span>
-            <span class="sticker s13">
-                <img class="sticker-img" src="/assets/stickers/database.webp" alt="" width="46" height="46" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
-            </span>
-            <span class="sticker s14">
-                <img class="sticker-img" src="/assets/stickers/lock.webp" alt="" width="44" height="44" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
-            </span>
-            <span class="sticker s15">
-                <img class="sticker-img" src="/assets/stickers/idea.webp" alt="" width="84" height="84" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
-            </span>
-            <span class="sticker s16">
-                <img class="sticker-img" src="/assets/stickers/sparkles.webp" alt="" width="66" height="66" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
-            </span>
-            <span class="sticker s17">
-                <img class="sticker-img" src="/assets/stickers/trophy.webp" alt="" width="50" height="50" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
-            </span>
-            <span class="sticker s18">
-                <img class="sticker-img" src="/assets/stickers/workflow.webp" alt="" width="50" height="50" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
-            </span>
-            <span class="sticker s19">
-                <img class="sticker-img" src="/assets/stickers/code.webp" alt="" width="64" height="64" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
-            </span>
-            <span class="sticker s20">
-                <img class="sticker-img" src="/assets/stickers/plug.webp" alt="" width="78" height="78" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
-            </span>
-            <span class="sticker s21">
-                <img class="sticker-img" src="/assets/stickers/bot.webp" alt="" width="54" height="54" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
-            </span>
-            <span class="sticker s22">
-                <img class="sticker-img" src="/assets/stickers/server.webp" alt="" width="70" height="70" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
-            </span>
-            <span class="sticker s23">
                 <img class="sticker-img" src="/assets/stickers/api.webp" alt="" width="46" height="46" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
             </span>
+            <span class="sticker s03 sticker-top">
+                <img class="sticker-img" src="/assets/stickers/medal.webp" alt="" width="48" height="48" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s04">
+                <img class="sticker-img" src="/assets/stickers/firewall.webp" alt="" width="48" height="48" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s05">
+                <img class="sticker-img" src="/assets/stickers/hourglass.webp" alt="" width="46" height="46" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s06">
+                <img class="sticker-img" src="/assets/stickers/layers.webp" alt="" width="42" height="42" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s07">
+                <img class="sticker-img" src="/assets/stickers/lightning-bolt.webp" alt="" width="48" height="48" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s08">
+                <img class="sticker-img" src="/assets/stickers/calculator.webp" alt="" width="48" height="48" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s09">
+                <img class="sticker-img" src="/assets/stickers/lock.webp" alt="" width="48" height="48" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s10">
+                <img class="sticker-img" src="/assets/stickers/robot-2.webp" alt="" width="46" height="46" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s11 sticker-top">
+                <img class="sticker-img" src="/assets/stickers/trophy.webp" alt="" width="46" height="46" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s12">
+                <img class="sticker-img" src="/assets/stickers/code.webp" alt="" width="42" height="42" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s13">
+                <img class="sticker-img" src="/assets/stickers/workflow.webp" alt="" width="52" height="52" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s14">
+                <img class="sticker-img" src="/assets/stickers/shield.webp" alt="" width="52" height="52" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s15">
+                <img class="sticker-img" src="/assets/stickers/chip.webp" alt="" width="48" height="48" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s16">
+                <img class="sticker-img" src="/assets/stickers/cloud.webp" alt="" width="46" height="46" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s17">
+                <img class="sticker-img" src="/assets/stickers/brain.webp" alt="" width="38" height="38" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s18">
+                <img class="sticker-img" src="/assets/stickers/database.webp" alt="" width="48" height="48" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s19">
+                <img class="sticker-img" src="/assets/stickers/test-tube.webp" alt="" width="44" height="44" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s20">
+                <img class="sticker-img" src="/assets/stickers/line-chart.webp" alt="" width="44" height="44" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s21">
+                <img class="sticker-img" src="/assets/stickers/sparkles.webp" alt="" width="44" height="44" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s22">
+                <img class="sticker-img" src="/assets/stickers/server.webp" alt="" width="46" height="46" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s23 sticker-top">
+                <img class="sticker-img" src="/assets/stickers/star.webp" alt="" width="52" height="52" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
             <span class="sticker s24">
-                <img class="sticker-img" src="/assets/stickers/chip.webp" alt="" width="44" height="44" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+                <img class="sticker-img" src="/assets/stickers/microscope.webp" alt="" width="42" height="42" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
             </span>
             <span class="sticker s25">
-                <img class="sticker-img" src="/assets/stickers/cursor.webp" alt="" width="56" height="56" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+                <img class="sticker-img" src="/assets/stickers/book.webp" alt="" width="48" height="48" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
             </span>
             <span class="sticker s26">
-                <img class="sticker-img" src="/assets/stickers/calculator.webp" alt="" width="58" height="58" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+                <img class="sticker-img" src="/assets/stickers/chart.webp" alt="" width="44" height="44" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
             </span>
-            <span class="sticker s27">
-                <img class="sticker-img" src="/assets/stickers/clock.webp" alt="" width="70" height="70" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            <span class="sticker s27 sticker-top">
+                <img class="sticker-img" src="/assets/stickers/gear.webp" alt="" width="42" height="42" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
             </span>
             <span class="sticker s28">
-                <img class="sticker-img" src="/assets/stickers/hourglass.webp" alt="" width="78" height="78" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+                <img class="sticker-img" src="/assets/stickers/rocket.webp" alt="" width="44" height="44" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
             </span>
             <span class="sticker s29">
-                <img class="sticker-img" src="/assets/stickers/key.webp" alt="" width="48" height="48" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+                <img class="sticker-img" src="/assets/stickers/plug.webp" alt="" width="52" height="52" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
             </span>
             <span class="sticker s30">
-                <img class="sticker-img" src="/assets/stickers/star.webp" alt="" width="46" height="46" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+                <img class="sticker-img" src="/assets/stickers/robot.webp" alt="" width="52" height="52" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
             </span>
             <span class="sticker s31">
-                <img class="sticker-img" src="/assets/stickers/medal.webp" alt="" width="54" height="54" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
-            </span>
-            <span class="sticker s32">
-                <img class="sticker-img" src="/assets/stickers/crown.webp" alt="" width="64" height="64" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
-            </span>
-            <span class="sticker s33">
-                <img class="sticker-img" src="/assets/stickers/compass.webp" alt="" width="64" height="64" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
-            </span>
-            <span class="sticker s34">
-                <img class="sticker-img" src="/assets/stickers/book.webp" alt="" width="72" height="72" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
-            </span>
-            <span class="sticker s35">
-                <img class="sticker-img" src="/assets/stickers/microscope.webp" alt="" width="44" height="44" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
-            </span>
-            <span class="sticker s36">
-                <img class="sticker-img" src="/assets/stickers/test-tube.webp" alt="" width="48" height="48" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
-            </span>
-            <span class="sticker s37">
-                <img class="sticker-img" src="/assets/stickers/firewall.webp" alt="" width="66" height="66" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
-            </span>
-            <span class="sticker s38">
-                <img class="sticker-img" src="/assets/stickers/bug.webp" alt="" width="58" height="58" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
-            </span>
-            <span class="sticker s39">
-                <img class="sticker-img" src="/assets/stickers/layers.webp" alt="" width="62" height="62" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
-            </span>
-            <span class="sticker s40">
                 <img class="sticker-img" src="/assets/stickers/satellite.webp" alt="" width="52" height="52" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
             </span>
-            <!-- Additional stickers to fill empty areas -->
+            <span class="sticker s32">
+                <img class="sticker-img" src="/assets/stickers/key.webp" alt="" width="46" height="46" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s33">
+                <img class="sticker-img" src="/assets/stickers/crown.webp" alt="" width="44" height="44" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s34">
+                <img class="sticker-img" src="/assets/stickers/clock.webp" alt="" width="46" height="46" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s35">
+                <img class="sticker-img" src="/assets/stickers/idea.webp" alt="" width="44" height="44" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s36">
+                <img class="sticker-img" src="/assets/stickers/checkmark.webp" alt="" width="52" height="52" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s37">
+                <img class="sticker-img" src="/assets/stickers/bug.webp" alt="" width="46" height="46" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s38">
+                <img class="sticker-img" src="/assets/stickers/compass.webp" alt="" width="48" height="48" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s39">
+                <img class="sticker-img" src="/assets/stickers/bot.webp" alt="" width="52" height="52" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s40 sticker-top">
+                <img class="sticker-img" src="/assets/stickers/puzzle.webp" alt="" width="44" height="44" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
             <span class="sticker s41">
-                <img class="sticker-img" src="/assets/stickers/gear.webp" alt="" width="40" height="40" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+                <img class="sticker-img" src="/assets/stickers/cloud.webp" alt="" width="52" height="52" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
             </span>
             <span class="sticker s42">
-                <img class="sticker-img" src="/assets/stickers/code.webp" alt="" width="38" height="38" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+                <img class="sticker-img" src="/assets/stickers/lightning-bolt.webp" alt="" width="38" height="38" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
             </span>
             <span class="sticker s43">
-                <img class="sticker-img" src="/assets/stickers/database.webp" alt="" width="36" height="36" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+                <img class="sticker-img" src="/assets/stickers/line-chart.webp" alt="" width="52" height="52" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
             </span>
             <span class="sticker s44">
-                <img class="sticker-img" src="/assets/stickers/robot.webp" alt="" width="42" height="42" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+                <img class="sticker-img" src="/assets/stickers/compass.webp" alt="" width="42" height="42" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
             </span>
-            <span class="sticker s45">
-                <img class="sticker-img" src="/assets/stickers/plug.webp" alt="" width="38" height="38" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            <span class="sticker s45 sticker-top">
+                <img class="sticker-img" src="/assets/stickers/puzzle.webp" alt="" width="46" height="46" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
             </span>
             <span class="sticker s46">
-                <img class="sticker-img" src="/assets/stickers/lightning-bolt.webp" alt="" width="36" height="36" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+                <img class="sticker-img" src="/assets/stickers/idea.webp" alt="" width="46" height="46" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s47">
+                <img class="sticker-img" src="/assets/stickers/microscope.webp" alt="" width="44" height="44" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s48">
+                <img class="sticker-img" src="/assets/stickers/checkmark.webp" alt="" width="44" height="44" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s49">
+                <img class="sticker-img" src="/assets/stickers/bug.webp" alt="" width="44" height="44" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s50">
+                <img class="sticker-img" src="/assets/stickers/test-tube.webp" alt="" width="52" height="52" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s51">
+                <img class="sticker-img" src="/assets/stickers/medal.webp" alt="" width="52" height="52" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s52">
+                <img class="sticker-img" src="/assets/stickers/rocket.webp" alt="" width="38" height="38" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s53">
+                <img class="sticker-img" src="/assets/stickers/server.webp" alt="" width="42" height="42" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s54">
+                <img class="sticker-img" src="/assets/stickers/clock.webp" alt="" width="48" height="48" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s55 sticker-top">
+                <img class="sticker-img" src="/assets/stickers/chart.webp" alt="" width="46" height="46" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s56">
+                <img class="sticker-img" src="/assets/stickers/robot.webp" alt="" width="44" height="44" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s57">
+                <img class="sticker-img" src="/assets/stickers/bot.webp" alt="" width="46" height="46" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s58">
+                <img class="sticker-img" src="/assets/stickers/api.webp" alt="" width="46" height="46" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s59">
+                <img class="sticker-img" src="/assets/stickers/crown.webp" alt="" width="52" height="52" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s60">
+                <img class="sticker-img" src="/assets/stickers/brain.webp" alt="" width="44" height="44" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s61">
+                <img class="sticker-img" src="/assets/stickers/cursor.webp" alt="" width="38" height="38" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s62">
+                <img class="sticker-img" src="/assets/stickers/database.webp" alt="" width="42" height="42" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s63">
+                <img class="sticker-img" src="/assets/stickers/book.webp" alt="" width="48" height="48" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s64">
+                <img class="sticker-img" src="/assets/stickers/layers.webp" alt="" width="48" height="48" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s65 sticker-top">
+                <img class="sticker-img" src="/assets/stickers/trophy.webp" alt="" width="52" height="52" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s66 sticker-top">
+                <img class="sticker-img" src="/assets/stickers/lock.webp" alt="" width="52" height="52" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s67">
+                <img class="sticker-img" src="/assets/stickers/gear.webp" alt="" width="42" height="42" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s68 sticker-top">
+                <img class="sticker-img" src="/assets/stickers/sparkles.webp" alt="" width="46" height="46" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s69">
+                <img class="sticker-img" src="/assets/stickers/workflow.webp" alt="" width="38" height="38" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s70">
+                <img class="sticker-img" src="/assets/stickers/code.webp" alt="" width="52" height="52" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s71">
+                <img class="sticker-img" src="/assets/stickers/key.webp" alt="" width="38" height="38" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s72">
+                <img class="sticker-img" src="/assets/stickers/calculator.webp" alt="" width="38" height="38" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s73 sticker-top">
+                <img class="sticker-img" src="/assets/stickers/shield.webp" alt="" width="52" height="52" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s74">
+                <img class="sticker-img" src="/assets/stickers/hourglass.webp" alt="" width="48" height="48" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s75">
+                <img class="sticker-img" src="/assets/stickers/star.webp" alt="" width="42" height="42" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s76">
+                <img class="sticker-img" src="/assets/stickers/satellite.webp" alt="" width="38" height="38" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s77">
+                <img class="sticker-img" src="/assets/stickers/chip.webp" alt="" width="38" height="38" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
+            </span>
+            <span class="sticker s78">
+                <img class="sticker-img" src="/assets/stickers/robot-2.webp" alt="" width="46" height="46" loading="lazy" decoding="async" draggable="false" fetchpriority="low">
             </span>
         </div>
 
@@ -766,7 +949,7 @@
 
                 <div class="composer">
                     <label class="sr-only" for="requirements">Prompt / Requirement</label>
-                    <textarea id="requirements" placeholder="Example: Listen to Stripe webhooks, store successes in Postgres, send Gmail confirmations, log errors to Slack."></textarea>
+                    <textarea id="requirements" placeholder="Describe the workflow you want to automate, e.g., Sync Stripe payments to Postgres..."></textarea>
                     <div class="composer-actions">
                         <button class="btn-send" id="generate-btn" aria-label="Send prompt" title="Send prompt">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
@@ -783,12 +966,41 @@
 
                 <div class="result-panel hidden" id="result-panel">
                     <div class="result-header">
-                        <span>Workflow JSON</span>
+                        <div class="result-header-left">
+                            <span class="result-title">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="16" height="16" style="vertical-align:-2px; color:#0284c7;"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M10 6.5h4M6.5 10v4M17.5 10v4M10 17.5h4"/></svg>
+                                Workflow Architecture
+                            </span>
+                            <div class="view-tabs" role="tablist" aria-label="Workflow view switcher">
+                                <button type="button" class="view-tab is-active" id="tab-canvas-btn" role="tab" aria-selected="true" aria-controls="canvas-view">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13" style="vertical-align:-2px; margin-right:5px;"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><line x1="8.5" y1="8.5" x2="15.5" y2="15.5"/></svg>
+                                    Interactive Canvas
+                                </button>
+                                <button type="button" class="view-tab" id="tab-json-btn" role="tab" aria-selected="false" aria-controls="json-view">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13" style="vertical-align:-2px; margin-right:5px;"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                                    Raw JSON
+                                </button>
+                            </div>
+                        </div>
                         <div class="result-actions">
-                            <button class="copy-btn" id="copy-json-btn">Copy</button>
+                            <button type="button" class="copy-btn" id="copy-json-btn" title="Copy workflow JSON to clipboard">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                                Copy JSON
+                            </button>
+                            <button type="button" class="download-btn" id="download-json-btn" title="Download n8n workflow file">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                Download .json
+                            </button>
                         </div>
                     </div>
-                    <textarea id="workflow-json" class="json-output" readonly aria-label="Generated workflow JSON"></textarea>
+
+                    <div id="canvas-view" class="result-view-panel">
+                        <div id="workflow-canvas-container" class="workflow-canvas-container"></div>
+                    </div>
+
+                    <div id="json-view" class="result-view-panel hidden">
+                        <textarea id="workflow-json" class="json-output" readonly aria-label="Generated workflow JSON"></textarea>
+                    </div>
                 </div>
             </div>
         </main>
@@ -820,6 +1032,9 @@
         </footer>
     </div>
 
+    <script src="/assets/workflow-icons.js"></script>
+    <script src="/assets/workflow-generator.js"></script>
+    <script src="/assets/workflow-canvas.js"></script>
     <script src="/app.js" defer></script>
 </body>
 </html>
