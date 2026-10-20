@@ -935,9 +935,15 @@ body.workflow-active .sticker-field .sticker.sticker-top {
         --lift: -10px;
         --sway: 6deg;
     }
-@media (max-width: 480px) {
+@media (max-width: 768px) {
     .sticker-field .sticker {
-        --w: 32px !important;
+        --w: 28px !important;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .sticker-field .sticker {
+        --w: 36px !important;
     }
 }
 

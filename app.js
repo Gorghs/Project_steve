@@ -545,7 +545,30 @@
     }
   }
 
+  function onTouchMove(e) {
+    if (e.touches && e.touches.length > 0) {
+      mouseX = e.touches[0].clientX;
+      mouseY = e.touches[0].clientY;
+      if (!isTicking) {
+        isTicking = true;
+        requestAnimationFrame(updatePhysics);
+      }
+    }
+  }
+
+  function onTouchEnd() {
+    mouseX = -9999;
+    mouseY = -9999;
+    if (!isTicking) {
+      isTicking = true;
+      requestAnimationFrame(updatePhysics);
+    }
+  }
+
   window.addEventListener('pointermove', onPointerMove, { passive: true });
   window.addEventListener('mousemove', onPointerMove, { passive: true });
   document.addEventListener('mouseleave', onPointerLeave);
+  window.addEventListener('touchmove', onTouchMove, { passive: true });
+  window.addEventListener('touchend', onTouchEnd, { passive: true });
+  window.addEventListener('touchcancel', onTouchEnd, { passive: true });
 })();
